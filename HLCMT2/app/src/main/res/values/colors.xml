@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorText">#FAF9FA</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#2196F3</color>
+    <color name="colorBg">#202020</color>
+    <color name="colorGrad1">#2C3E50</color>
+    <color name="colorGrad2">#000000</color>
+    <color name="colorMenu">#ffffff</color>
+    <color name="colorHintGray">#697471</color>
+    <color name="colorTransparent">#00000000</color>
+</resources>
