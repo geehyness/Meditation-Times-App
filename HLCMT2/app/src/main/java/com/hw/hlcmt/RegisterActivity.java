@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hw.hlcmt.JavaRepositories.MyProgressDialog;
 import com.hw.hlcmt.JavaRepositories.UserModel;
+import com.hw.hlcmt.JavaRepositories.UserType;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     private final FirebaseAuth fbAuth = FirebaseAuth.getInstance();
@@ -118,7 +119,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                                UserModel user = new UserModel(fbAuth.getUid(), uname, uemail, "normal");
+                                UserModel user = new UserModel(fbAuth.getUid(), uname, uemail, UserType.NORMAL);
 
                                 FirebaseFirestore ff = FirebaseFirestore.getInstance();
 

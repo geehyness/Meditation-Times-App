@@ -3,13 +3,13 @@ package com.hw.hlcmt.JavaRepositories;
 public class UserModel {
     private String name;
     private String email;
-    private String userType;
+    private UserType userType;
     private String userId;
 
     public String getName() {
         return name;
     }
-    public String getUserType() {
+    public UserType getUserType() {
         return userType;
     }
     public String getUserId() {
@@ -19,7 +19,7 @@ public class UserModel {
         return email;
     }
 
-    public void setUserType(String userType) {
+    public void setUserType(UserType userType) {
         this.userType = userType;
     }
     public void setEmail(String email) {
@@ -34,7 +34,7 @@ public class UserModel {
 
     public UserModel(){}
 
-    public UserModel(String userId, String name, String email, String userType) {
+    public UserModel(String userId, String name, String email, UserType userType) {
         this.userId = userId;
         this.name = name;
         this.email = email;
