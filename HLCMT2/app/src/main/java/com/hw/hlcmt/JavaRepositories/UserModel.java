@@ -1,52 +1,36 @@
 package com.hw.hlcmt.JavaRepositories;
 
 public class UserModel {
+    private String name;
+    private String email;
+    private String userType;
+    private String userId;
+
     public String getName() {
         return name;
     }
-
     public String getUserType() {
         return userType;
+    }
+    public String getUserId() {
+        return userId;
+    }
+    public String getEmail() {
+        return email;
     }
 
     public void setUserType(String userType) {
         this.userType = userType;
     }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
     public void setEmail(String email) {
         this.email = email;
     }
-
-    private String name;
-    private String email;
-    private String userType;
-
-    public String getUserIdDoc() {
-        return userIdDoc;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
-
-    public void setUserIdDoc(String userIdDoc) {
-        this.userIdDoc = userIdDoc;
+    public void setName(String name) {
+        this.name = name;
     }
-
-    private String userIdDoc;
-    private String userId;
 
     public UserModel(){}
 

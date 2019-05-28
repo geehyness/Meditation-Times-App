@@ -21,10 +21,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.hw.hlcmt.JavaRepositories.MyProgressDialog;
 import com.hw.hlcmt.JavaRepositories.UserModel;
 
@@ -145,7 +144,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 FirebaseFirestore ff = FirebaseFirestore.getInstance();
                                 final String loginId = fbAuth.getUid();
 
-                                CollectionReference userRef = ff.collection("User");
+                                DocumentReference user = ff.document("User/"+loginId);
+                                user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        progressDialog.dismiss();
+                                        UserModel userModel = documentSnapshot.toObject(UserModel.class);
+                                        Toast.makeText(LoginActivity.this, "Welcome back " + userModel.getName(), Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                        LoginActivity.this.finish();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        progressDialog.dismiss();
+                                        fbAuth.signOut();
+                                        Toast.makeText(LoginActivity.this, "Error - " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                                /*CollectionReference userRef = ff.collection("User");
                                 userRef.get()
                                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                             @Override
@@ -154,11 +172,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                 for (QueryDocumentSnapshot userSnapshot : queryDocumentSnapshots) {
                                                     UserModel user = userSnapshot.toObject(UserModel.class);
                                                     user.setUserIdDoc(userSnapshot.getId());
-
-                                                    /*if(user.getUserId() == loginId){
-                                                        currUser[0] = user;
-                                                        return;
-                                                    }*/
 
                                                     if (user.getUserId().equals(loginId)){
                                                         Toast.makeText(LoginActivity.this, "Welcome back " + user.getName(), Toast.LENGTH_SHORT).show();
@@ -175,7 +188,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             public void onFailure(@NonNull Exception e) {
                                                 Toast.makeText(LoginActivity.this, "Error - " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
-                                        });
+                                        });*/
                             } else {
                                 progressDialog.dismiss();
                                 Toast.makeText(LoginActivity.this, "Login Failed. Try again later!", Toast.LENGTH_LONG).show();
@@ -183,6 +196,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     });
         } catch (Exception e){
+            progressDialog.dismiss();
             Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
         }
 

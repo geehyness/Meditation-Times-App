@@ -17,7 +17,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hw.hlcmt.JavaRepositories.MyProgressDialog;
 import com.hw.hlcmt.JavaRepositories.UserModel;
@@ -103,6 +102,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
 
 
+
+
+/**
+ *
+ *
+ */
         final MyProgressDialog progressDialog = new MyProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
@@ -117,21 +122,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                                 FirebaseFirestore ff = FirebaseFirestore.getInstance();
 
-                                ff.collection("User").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        progressDialog.dismiss();
-                                        Toast.makeText(RegisterActivity.this, "Registration Successful. Follow link in uemail to verify your uemail address!", Toast.LENGTH_LONG).show();
-                                        startActivity(new Intent(RegisterActivity.this, EmailVerifyActivity.class));
-                                        finish();
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        progressDialog.dismiss();
-                                        Toast.makeText(RegisterActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                                    }
-                                });
+                            ff.collection("User").document(user.getUserId()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(RegisterActivity.this, "Registration Successful. Follow link in uemail to verify your uemail address!", Toast.LENGTH_LONG).show();
+                                    startActivity(new Intent(RegisterActivity.this, EmailVerifyActivity.class));
+                                    finish();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(RegisterActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override

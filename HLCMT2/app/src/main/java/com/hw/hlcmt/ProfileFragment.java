@@ -16,10 +16,9 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.hw.hlcmt.JavaRepositories.MyProgressDialog;
 import com.hw.hlcmt.JavaRepositories.UserModel;
 
@@ -32,11 +31,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        /**
+         *  UI VARIABLES
+         */
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
         username = v.findViewById(R.id.txtProfileName);
         email = v.findViewById(R.id.txtProfileEmail);
         password = v.findViewById(R.id.txtProfilePassword);
 
+
+
+        /**
+         *  GETTING CURRENT USER'S INFO
+         */
         final MyProgressDialog progressDialog = new MyProgressDialog(getContext());
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
@@ -45,26 +52,23 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             FirebaseFirestore ff = FirebaseFirestore.getInstance();
             final String loginId = fbAuth.getUid();
 
-            CollectionReference userRef = ff.collection("User");
-            userRef.get()
-                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+            DocumentReference user = ff.document("User/"+loginId);
+            user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    progressDialog.dismiss();
+                    UserModel userModel = documentSnapshot.toObject(UserModel.class);
 
-                            for (QueryDocumentSnapshot userSnapshot : queryDocumentSnapshots) {
-                                UserModel user = userSnapshot.toObject(UserModel.class);
-                                user.setUserIdDoc(userSnapshot.getId());
-
-                                if (user.getUserId().equals(loginId)){
-                                    username.setText(user.getName());
-                                    email.setText(user.getEmail());
-                                }
-                            }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
+                    username.setText(userModel.getName());
+                    email.setText(userModel.getEmail());
+                }
+            }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    progressDialog.dismiss();
+                    fbAuth.signOut();
                     Toast.makeText(getContext(), "Error - " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Try logging out then back in!", Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (Exception e) {
@@ -72,11 +76,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         }
         progressDialog.dismiss();
 
+
+
+        /**
+         *  BUTTON FUNCTIONALITY
+         */
         Button btnUpdate = v.findViewById(R.id.btnUpdate);
         btnUpdate.setOnClickListener(this);
 
         return v;
     }
+
 
     @Override
     public void onClick(View v) {
