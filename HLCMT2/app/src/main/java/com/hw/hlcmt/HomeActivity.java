@@ -13,9 +13,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.hw.hlcmt.JavaRepositories.CollectionName;
+import com.hw.hlcmt.JavaRepositories.UserModel;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
     private final FirebaseAuth fbAuth = FirebaseAuth.getInstance();
@@ -42,6 +49,29 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     new MeditationFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_message);
         }
+
+        getUser();
+    }
+
+    private void getUser(){
+        FirebaseFirestore ff = FirebaseFirestore.getInstance();
+        final String loginId = fbAuth.getUid();
+        String ref = CollectionName.User+"/"+loginId;
+
+        final DocumentReference user = ff.document(ref);
+        user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                UserModel userModel = documentSnapshot.toObject(UserModel.class);
+
+                if(userModel != null){
+                    TextView name = findViewById(R.id.tvUserInfoName);
+                    TextView email = findViewById(R.id.tvUserInfoEmail);
+                    name.setText(userModel.getName());
+                    email.setText(userModel.getEmail());
+                }
+            }
+        });
     }
 
     @Override

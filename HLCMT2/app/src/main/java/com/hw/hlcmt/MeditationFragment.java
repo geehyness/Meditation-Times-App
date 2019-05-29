@@ -1,5 +1,6 @@
 package com.hw.hlcmt;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,14 +15,21 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.hw.hlcmt.JavaRepositories.ExampleAdapter;
-import com.hw.hlcmt.JavaRepositories.MTItem;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.hw.hlcmt.JavaRepositories.CollectionName;
+import com.hw.hlcmt.JavaRepositories.MTAdapter;
+import com.hw.hlcmt.JavaRepositories.MessageModel;
 import com.hw.hlcmt.JavaRepositories.UserModel;
+import com.hw.hlcmt.JavaRepositories.UserType;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class MeditationFragment extends Fragment {
     private final FirebaseAuth fbAuth = FirebaseAuth.getInstance();
@@ -30,60 +38,78 @@ public class MeditationFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private FloatingActionButton btnAddMT;
 
+    private ArrayList<MessageModel> MTList = new ArrayList<>();
+    private HashSet<MessageModel> set = new HashSet<>();
+    private CollectionReference messages = FirebaseFirestore.getInstance().collection(CollectionName.Messages);
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_meditation, container, false);
+        final View v = inflater.inflate(R.layout.fragment_meditation, container, false);
         btnAddMT = v.findViewById(R.id.btnAddMT);
         btnAddMT.hide();
 
-        ArrayList<MTItem> exampleList = new ArrayList<>();
-        exampleList.add(new MTItem(R.drawable.ic_chat, "Line 1", "Line 2"));
-        exampleList.add(new MTItem(R.drawable.ic_chat, "Line 3", "Line 4"));
-        exampleList.add(new MTItem(R.drawable.ic_chat, "Line 5", "Line 6"));
-        exampleList.add(new MTItem(R.drawable.ic_chat, "Line 7", "Line 8"));
-        exampleList.add(new MTItem(R.drawable.ic_chat, "Line 9", "Line 10"));
-        exampleList.add(new MTItem(R.drawable.ic_chat, "Line 11", "Line 12"));
-        exampleList.add(new MTItem(R.drawable.ic_chat, "Line 13", "Line 14"));
-        exampleList.add(new MTItem(R.drawable.ic_chat, "Line 15", "Line 16"));
-        exampleList.add(new MTItem(R.drawable.ic_chat, "Line 17", "Line 18"));
-        exampleList.add(new MTItem(R.drawable.ic_chat, "Line 19", "Line 20"));
-        exampleList.add(new MTItem(R.drawable.ic_chat, "Line 21", "Line 22"));
-        exampleList.add(new MTItem(R.drawable.ic_chat, "Line 23", "Line 24"));
-        exampleList.add(new MTItem(R.drawable.ic_chat, "Line 25", "Line 26"));
-        exampleList.add(new MTItem(R.drawable.ic_chat, "Line 27", "Line 28"));
-        exampleList.add(new MTItem(R.drawable.ic_chat, "Line 29", "Line 30"));
+        messages.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if (e != null){
+                    Toast.makeText(getContext(), "Error While Loading! \nError - " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-        mRecyclerView = v.findViewById(R.id.recyclerView);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new ExampleAdapter(exampleList);
+                if (queryDocumentSnapshots != null){
+                    for(DocumentSnapshot msg : queryDocumentSnapshots){
+                        MessageModel tempMsg = msg.toObject(MessageModel.class);
 
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+                        // If String is not in set, add it to the list and the set.
+                        if (!set.contains(tempMsg)) {
+                            MTList.add(tempMsg);
+                            set.add(tempMsg);
+                        }
+                    }
 
-        UserModel userModel = getUser();
-        if(userModel != null){
-            btnAddMT.show();
-        }
+                    mRecyclerView = v.findViewById(R.id.recyclerView);
+                    mRecyclerView.setHasFixedSize(true);
+                    mLayoutManager = new LinearLayoutManager(getContext());
+                    mAdapter = new MTAdapter(MTList);
+
+                    mRecyclerView.setLayoutManager(mLayoutManager);
+                    mRecyclerView.setAdapter(mAdapter);
+                }
+            }
+        });
+
+        getUser();
+
+        btnAddMT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), WriteMeditationTimes.class);
+                startActivity(i);
+            }
+        });
 
         return v;
     }
 
-    private UserModel getUser(){
-        final UserModel[] temp = new UserModel[1];
+    private void getUser(){
         FirebaseFirestore ff = FirebaseFirestore.getInstance();
         final String loginId = fbAuth.getUid();
 
-        final DocumentReference user = ff.document("User/"+loginId);
+        final DocumentReference user = ff.document(CollectionName.User+"/"+loginId);
         user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                temp[0] = documentSnapshot.toObject(UserModel.class);
-                Toast.makeText(getContext(), "Name - " + temp[0].getName(), Toast.LENGTH_SHORT).show();
+                UserModel userModel = documentSnapshot.toObject(UserModel.class);
+
+                if(userModel != null){
+                    if(userModel.getUserType().equals(UserType.ADMIN) ||
+                            userModel.getUserType().equals(UserType.WRITER)){
+                        btnAddMT.show();
+                    }
+                }
             }
         });
-
-        return temp[0];
     }
 }

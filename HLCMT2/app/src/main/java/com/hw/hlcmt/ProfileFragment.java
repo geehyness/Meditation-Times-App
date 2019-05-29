@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hw.hlcmt.JavaRepositories.CollectionName;
 import com.hw.hlcmt.JavaRepositories.MyProgressDialog;
 import com.hw.hlcmt.JavaRepositories.UserModel;
 
@@ -52,7 +53,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             FirebaseFirestore ff = FirebaseFirestore.getInstance();
             final String loginId = fbAuth.getUid();
 
-            DocumentReference user = ff.document("User/"+loginId);
+            DocumentReference user = ff.document(CollectionName.User+"/"+loginId);
             user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {

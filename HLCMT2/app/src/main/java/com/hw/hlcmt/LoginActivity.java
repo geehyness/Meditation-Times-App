@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hw.hlcmt.JavaRepositories.CollectionName;
 import com.hw.hlcmt.JavaRepositories.MyProgressDialog;
 import com.hw.hlcmt.JavaRepositories.UserModel;
 
@@ -139,12 +140,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
                             if (task.isSuccessful()) {
-                                //UserModel userModel = new UserModel(uname, uemail, "normal");
 
                                 FirebaseFirestore ff = FirebaseFirestore.getInstance();
                                 final String loginId = fbAuth.getUid();
 
-                                DocumentReference user = ff.document("User/"+loginId);
+                                DocumentReference user = ff.document(CollectionName.User+"/"+loginId);
                                 user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -163,32 +163,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     }
                                 });
 
-                                /*CollectionReference userRef = ff.collection("User");
-                                userRef.get()
-                                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                progressDialog.dismiss();
-                                                for (QueryDocumentSnapshot userSnapshot : queryDocumentSnapshots) {
-                                                    UserModel user = userSnapshot.toObject(UserModel.class);
-                                                    user.setUserIdDoc(userSnapshot.getId());
-
-                                                    if (user.getUserId().equals(loginId)){
-                                                        Toast.makeText(LoginActivity.this, "Welcome back " + user.getName(), Toast.LENGTH_SHORT).show();
-                                                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                                                        LoginActivity.this.finish();
-                                                    } else {
-                                                        Toast.makeText(LoginActivity.this, fbAuth.getUid(), Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(LoginActivity.this, "Error - " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        });*/
                             } else {
                                 progressDialog.dismiss();
                                 Toast.makeText(LoginActivity.this, "Login Failed. Try again later!", Toast.LENGTH_LONG).show();
@@ -199,52 +173,5 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             progressDialog.dismiss();
             Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
         }
-
-
-
-
-
-
-
-
-
-
-
-        /*ProgressDialog progressBar = new ProgressDialog(LoginActivity.this);
-        progressBar.setMessage("Logging in");
-        progressBar.show();
-
-        //Login
-        fbAuth.signInWithEmailAndPassword(uemail, upass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                FirebaseFirestore ff = FirebaseFirestore.getInstance();
-                CollectionReference userRef = ff.collection("User");
-                userRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot user : queryDocumentSnapshots){
-                            UserModel u = user.toObject(UserModel.class);
-                            if(u.email == uemail){
-                                Toast.makeText(LoginActivity.this, "Welcome back " + u.name, Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                                LoginActivity.this.finish();
-                            }
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(LoginActivity.this, "Error - " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(LoginActivity.this, "Error - " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        progressBar.hide();*/
     }
 }

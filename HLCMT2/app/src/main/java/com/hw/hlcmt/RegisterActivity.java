@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.hw.hlcmt.JavaRepositories.CollectionName;
 import com.hw.hlcmt.JavaRepositories.MyProgressDialog;
 import com.hw.hlcmt.JavaRepositories.UserModel;
 import com.hw.hlcmt.JavaRepositories.UserType;
@@ -123,7 +124,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                                 FirebaseFirestore ff = FirebaseFirestore.getInstance();
 
-                            ff.collection("User").document(user.getUserId()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            ff.collection(CollectionName.User).document(user.getUserId()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     progressDialog.dismiss();
