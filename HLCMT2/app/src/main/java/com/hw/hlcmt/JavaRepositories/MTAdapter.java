@@ -16,17 +16,17 @@ public class MTAdapter extends RecyclerView.Adapter<MTAdapter.ExampleViewHolder>
     private ArrayList<MessageModel> mExampleList;
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder {
-        public ImageView mImageView;
-        public TextView mTextView1;
-        public TextView mTextView2;
-        public TextView mTextView3;
+        public ImageView mtIconView;
+        public TextView mtTitleView;
+        public TextView mtAuthorView;
+        public TextView mtWeekView;
 
         public ExampleViewHolder(View itemView) {
             super(itemView);
-            mImageView = itemView.findViewById(R.id.mtImage);
-            mTextView1 = itemView.findViewById(R.id.mtTitle);
-            mTextView2 = itemView.findViewById(R.id.mtAuthor);
-            mTextView3 = itemView.findViewById(R.id.mtDate);
+            mtIconView = itemView.findViewById(R.id.mtImage);
+            mtTitleView = itemView.findViewById(R.id.mtTitle);
+            mtAuthorView = itemView.findViewById(R.id.mtAuthor);
+            mtWeekView = itemView.findViewById(R.id.mtDate);
         }
     }
 
@@ -46,10 +46,10 @@ public class MTAdapter extends RecyclerView.Adapter<MTAdapter.ExampleViewHolder>
     public void onBindViewHolder(@NonNull ExampleViewHolder exampleViewHolder, int i) {
         MessageModel currentItem = mExampleList.get(i);
 
-        exampleViewHolder.mImageView.setImageResource(currentItem.getImageResource());
-        exampleViewHolder.mTextView1.setText(currentItem.getTitle());
-        exampleViewHolder.mTextView2.setText(currentItem.getAuthor());
-        exampleViewHolder.mTextView3.setText(currentItem.getDate());
+        exampleViewHolder.mtIconView.setImageResource(currentItem.getImageResource());
+        exampleViewHolder.mtTitleView.setText(currentItem.getTitle());
+        exampleViewHolder.mtAuthorView.setText(currentItem.getAuthor()+" ("+currentItem.getDate()+")");
+        exampleViewHolder.mtWeekView.setText("Week "+currentItem.getWeek() + " - " + currentItem.getYear());
     }
 
     @Override

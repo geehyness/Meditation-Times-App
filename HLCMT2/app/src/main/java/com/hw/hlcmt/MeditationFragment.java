@@ -33,10 +33,11 @@ import java.util.HashSet;
 
 public class MeditationFragment extends Fragment {
     private final FirebaseAuth fbAuth = FirebaseAuth.getInstance();
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView mtRecyclerView;
+    private RecyclerView.Adapter mtAdapter;
+    private RecyclerView.LayoutManager mtLayoutManager;
     private FloatingActionButton btnAddMT;
+    private FloatingActionButton btnAdmin;
 
     private ArrayList<MessageModel> MTList = new ArrayList<>();
     private HashSet<MessageModel> set = new HashSet<>();
@@ -48,7 +49,17 @@ public class MeditationFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_meditation, container, false);
         btnAddMT = v.findViewById(R.id.btnAddMT);
+        btnAdmin = v.findViewById(R.id.btnAdmin);
         btnAddMT.hide();
+        btnAdmin.hide();
+
+        mtRecyclerView = v.findViewById(R.id.recyclerView);
+        mtRecyclerView.setHasFixedSize(true);
+        mtLayoutManager = new LinearLayoutManager(getContext());
+        mtAdapter = new MTAdapter(MTList);
+
+        mtRecyclerView.setLayoutManager(mtLayoutManager);
+        mtRecyclerView.setAdapter(mtAdapter);
 
         messages.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -61,21 +72,19 @@ public class MeditationFragment extends Fragment {
                 if (queryDocumentSnapshots != null){
                     for(DocumentSnapshot msg : queryDocumentSnapshots){
                         MessageModel tempMsg = msg.toObject(MessageModel.class);
+                        tempMsg.setMsgId(msg.getId());
 
-                        // If String is not in set, add it to the list and the set.
-                        if (!set.contains(tempMsg)) {
+                        boolean exists = false;
+
+                        for(MessageModel m : MTList)
+                            if(m.getMsgId().equals(tempMsg.getMsgId()))
+                                exists = true;
+
+                        if (!exists)
                             MTList.add(tempMsg);
-                            set.add(tempMsg);
-                        }
                     }
 
-                    mRecyclerView = v.findViewById(R.id.recyclerView);
-                    mRecyclerView.setHasFixedSize(true);
-                    mLayoutManager = new LinearLayoutManager(getContext());
-                    mAdapter = new MTAdapter(MTList);
-
-                    mRecyclerView.setLayoutManager(mLayoutManager);
-                    mRecyclerView.setAdapter(mAdapter);
+                    mtAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -105,9 +114,10 @@ public class MeditationFragment extends Fragment {
 
                 if(userModel != null){
                     if(userModel.getUserType().equals(UserType.ADMIN) ||
-                            userModel.getUserType().equals(UserType.WRITER)){
+                            userModel.getUserType().equals(UserType.WRITER))
                         btnAddMT.show();
-                    }
+                    if(userModel.getUserType().equals(UserType.ADMIN))
+                        btnAdmin.show();
                 }
             }
         });

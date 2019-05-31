@@ -11,7 +11,7 @@
     </style>
 
     <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:background">@color/colorBg</item>
+        <item name="android:background">@drawable/bg_gradient</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:color">@color/colorPrimary</item>
         <item name="android:buttonBarButtonStyle">@style/MyButtonsStyle</item>
