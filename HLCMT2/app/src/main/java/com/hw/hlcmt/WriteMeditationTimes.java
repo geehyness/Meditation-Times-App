@@ -47,8 +47,8 @@ public class WriteMeditationTimes extends AppCompatActivity {
         yearUI = findViewById(R.id.txtYear);
         langUI = findViewById(R.id.spLanguage);
 
-        Calendar c = Calendar.getInstance();
-        yearUI.setText((String.valueOf(c.get(Calendar.YEAR))));
+        /*Calendar c = Calendar.getInstance();
+        yearUI.setText((String.valueOf(c.get(Calendar.YEAR))));*/
 
         String[] lang = {Language.English.toString(), Language.Siswati.toString()};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, lang);

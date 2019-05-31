@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 import com.hw.hlcmt.JavaRepositories.CollectionName;
 import com.hw.hlcmt.JavaRepositories.MTAdapter;
 import com.hw.hlcmt.JavaRepositories.MessageModel;
@@ -33,16 +35,16 @@ import java.util.HashSet;
 
 public class MeditationFragment extends Fragment {
     private final FirebaseAuth fbAuth = FirebaseAuth.getInstance();
+
     private RecyclerView mtRecyclerView;
-    private RecyclerView.Adapter mtAdapter;
+    private MTAdapter mtAdapter;
     private RecyclerView.LayoutManager mtLayoutManager;
     private FloatingActionButton btnAddMT;
     private FloatingActionButton btnAdmin;
 
     private ArrayList<MessageModel> MTList = new ArrayList<>();
-    private HashSet<MessageModel> set = new HashSet<>();
     private CollectionReference messages = FirebaseFirestore.getInstance().collection(CollectionName.Messages);
-
+    public static final String MESSAGE_JSON = "MessageModel";
 
     @Nullable
     @Override
@@ -53,13 +55,9 @@ public class MeditationFragment extends Fragment {
         btnAddMT.hide();
         btnAdmin.hide();
 
-        mtRecyclerView = v.findViewById(R.id.recyclerView);
-        mtRecyclerView.setHasFixedSize(true);
-        mtLayoutManager = new LinearLayoutManager(getContext());
-        mtAdapter = new MTAdapter(MTList);
+        getUser();
 
-        mtRecyclerView.setLayoutManager(mtLayoutManager);
-        mtRecyclerView.setAdapter(mtAdapter);
+        buildRecyclerView(v);
 
         messages.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -76,20 +74,20 @@ public class MeditationFragment extends Fragment {
 
                         boolean exists = false;
 
-                        for(MessageModel m : MTList)
+                        for (MessageModel m : MTList)
                             if(m.getMsgId().equals(tempMsg.getMsgId()))
                                 exists = true;
 
-                        if (!exists)
+                        if(!exists)
                             MTList.add(tempMsg);
                     }
 
+                    //mAdapter.
+                    Log.d("MTList", "Length - " + MTList.size());
                     mtAdapter.notifyDataSetChanged();
                 }
             }
         });
-
-        getUser();
 
         btnAddMT.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +117,30 @@ public class MeditationFragment extends Fragment {
                     if(userModel.getUserType().equals(UserType.ADMIN))
                         btnAdmin.show();
                 }
+            }
+        });
+    }
+
+    private void buildRecyclerView(View v){
+        mtRecyclerView = v.findViewById(R.id.recyclerView);
+        mtRecyclerView.setHasFixedSize(true);
+        mtLayoutManager = new LinearLayoutManager(getContext());
+        mtAdapter = new MTAdapter(MTList);
+
+        mtRecyclerView.setLayoutManager(mtLayoutManager);
+        mtRecyclerView.setAdapter(mtAdapter);
+
+        mtAdapter.setOnItemClickListener(new MTAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                MessageModel message = MTList.get(position);
+                String messageJSON = (new Gson()).toJson(message);
+
+                Log.d("MTItem", "Item - "+messageJSON);
+
+                Intent i = new Intent(getContext(), ViewMeditationTimes.class);
+                i.putExtra(MESSAGE_JSON, messageJSON);
+                startActivity(i);
             }
         });
     }

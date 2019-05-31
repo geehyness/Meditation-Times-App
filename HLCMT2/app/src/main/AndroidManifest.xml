@@ -11,7 +11,8 @@
         android:roundIcon="@drawable/ic_meditation_times"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WriteMeditationTimes"></activity>
+        <activity android:name=".ViewMeditationTimes"></activity>
+        <activity android:name=".WriteMeditationTimes" />
         <activity android:name=".EmailVerifyActivity" />
         <activity
             android:name=".HomeActivity"

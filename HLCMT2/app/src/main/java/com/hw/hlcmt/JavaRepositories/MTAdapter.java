@@ -13,7 +13,16 @@ import com.hw.hlcmt.R;
 import java.util.ArrayList;
 
 public class MTAdapter extends RecyclerView.Adapter<MTAdapter.ExampleViewHolder> {
-    private ArrayList<MessageModel> mExampleList;
+    private ArrayList<MessageModel> MTList;
+    private OnItemClickListener mtListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mtListener = listener;
+    }
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder {
         public ImageView mtIconView;
@@ -21,30 +30,42 @@ public class MTAdapter extends RecyclerView.Adapter<MTAdapter.ExampleViewHolder>
         public TextView mtAuthorView;
         public TextView mtWeekView;
 
-        public ExampleViewHolder(View itemView) {
+        public ExampleViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
             mtIconView = itemView.findViewById(R.id.mtImage);
             mtTitleView = itemView.findViewById(R.id.mtTitle);
             mtAuthorView = itemView.findViewById(R.id.mtAuthor);
             mtWeekView = itemView.findViewById(R.id.mtDate);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
     public MTAdapter(ArrayList<MessageModel> exampleList) {
-        mExampleList = exampleList;
+        MTList = exampleList;
     }
 
     @NonNull
     @Override
     public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.mt_item, viewGroup, false);
-        ExampleViewHolder evh = new ExampleViewHolder(v);
+        ExampleViewHolder evh = new ExampleViewHolder(v, mtListener);
         return evh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ExampleViewHolder exampleViewHolder, int i) {
-        MessageModel currentItem = mExampleList.get(i);
+        MessageModel currentItem = MTList.get(i);
 
         exampleViewHolder.mtIconView.setImageResource(currentItem.getImageResource());
         exampleViewHolder.mtTitleView.setText(currentItem.getTitle());
@@ -54,7 +75,7 @@ public class MTAdapter extends RecyclerView.Adapter<MTAdapter.ExampleViewHolder>
 
     @Override
     public int getItemCount() {
-        return mExampleList.size();
+        return MTList.size();
     }
 
 }
