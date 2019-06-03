@@ -80,6 +80,7 @@ public class MessageModel {
         this.author = author;
         this.date = date;
         this.week = week;
+        this.year = year;
         this.language = language;
     }
 }

@@ -8,9 +8,7 @@
     android:focusableInTouchMode="true"
     tools:context=".WriteMeditationTimes">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
@@ -39,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <EditText
-            android:id="@+id/txtDateMT"
+            android:id="@+id/txtMTWeek"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -48,7 +46,7 @@
             android:ems="10"
             android:hint="Week"
             android:inputType="number"
-            app:layout_constraintEnd_toStartOf="@+id/txtYear"
+            app:layout_constraintEnd_toStartOf="@+id/txtMsgYear"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtTitleMT" />
 
@@ -103,22 +101,13 @@
             android:gravity="start|top"
             android:hint="Message"
             android:inputType="textMultiLine"
+            android:overScrollMode="always"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical"
             app:layout_constraintBottom_toTopOf="@+id/btnPostMT"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spLanguage" />
-
-        <EditText
-            android:id="@+id/txtYear"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="Year"
-            android:inputType="number"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtTitleMT" />
 
         <Spinner
             android:id="@+id/spLanguage"
@@ -130,7 +119,19 @@
             android:spinnerMode="dialog"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtDateMT" />
+            app:layout_constraintTop_toBottomOf="@+id/txtMTWeek" />
+
+        <EditText
+            android:id="@+id/txtMsgYear"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Year"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtTitleMT" />
     </android.support.constraint.ConstraintLayout>
 
 </ScrollView>

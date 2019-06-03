@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 import com.hw.hlcmt.JavaRepositories.CollectionName;
 import com.hw.hlcmt.JavaRepositories.MyProgressDialog;
 import com.hw.hlcmt.JavaRepositories.UserModel;
@@ -151,7 +152,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         progressDialog.dismiss();
                                         UserModel userModel = documentSnapshot.toObject(UserModel.class);
                                         Toast.makeText(LoginActivity.this, "Welcome back " + userModel.getName(), Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+
+                                        String userJSON = (new Gson()).toJson(userModel);
+                                        Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                                        i.putExtra(MainActivity.LOGGED_IN_USER, userJSON);
+                                        startActivity(i);
                                         LoginActivity.this.finish();
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {

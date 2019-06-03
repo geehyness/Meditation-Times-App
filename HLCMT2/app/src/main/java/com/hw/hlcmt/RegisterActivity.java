@@ -1,8 +1,10 @@
 package com.hw.hlcmt;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -18,6 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 import com.hw.hlcmt.JavaRepositories.CollectionName;
 import com.hw.hlcmt.JavaRepositories.MyProgressDialog;
 import com.hw.hlcmt.JavaRepositories.UserModel;
@@ -25,12 +28,19 @@ import com.hw.hlcmt.JavaRepositories.UserType;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     private final FirebaseAuth fbAuth = FirebaseAuth.getInstance();
+    EditText editTextName,
+            editTextEmail,
+            editTextPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        editTextName = findViewById(R.id.txtRegUsername);
+        editTextEmail = findViewById(R.id.txtRegUserEmail);
+        editTextPassword = findViewById(R.id.txtRegPassword);
 
         Button reg = findViewById(R.id.btnRegister);
         TextView login = findViewById(R.id.tvLogin);
@@ -60,21 +70,35 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
+        if(!editTextName.getText().toString().equals("") ||
+           !editTextEmail.getText().toString().equals("") ||
+           !editTextPassword.getText().toString().equals("")) {
+
+            new AlertDialog.Builder(this, R.style.MyDialogTheme)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Go back to login?")
+                    .setMessage("When you go back any unsaved changes will be lost. Do you wish to continue?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                            finish();
+                        }
+
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        }
     }
 
     private void registerUser() {
-        EditText editTextName = findViewById(R.id.txtRegUsername),
-                 editTextEmail = findViewById(R.id.txtRegUserEmail),
-                 editTextPassword = findViewById(R.id.txtRegPassword);
-
         final String uname = editTextName.getText().toString().trim();
         final String uemail = editTextEmail.getText().toString().trim();
         String upass = editTextPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(uname)) {
-            Toast.makeText(RegisterActivity.this, "Username cannot be empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterActivity.this, "Name cannot be empty!", Toast.LENGTH_SHORT).show();
             editTextName.requestFocus();
             return;
         }
@@ -120,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                                UserModel user = new UserModel(fbAuth.getUid(), uname, uemail, UserType.NORMAL);
+                                UserModel user = new UserModel(fbAuth.getUid(), uname, uemail);
 
                                 FirebaseFirestore ff = FirebaseFirestore.getInstance();
 

@@ -7,10 +7,9 @@
     <color name="colorAccent">#3fabaf</color>
 
     <color name="colorBg">#202020</color>
-    <color name="colorGrad1">#f7efe5</color>
-    <color name="colorGrad2">#f7efe5</color>
+    <color name="colorGrad1">#ffffff</color>
+    <color name="colorGrad2">#ffffff</color>
 
-    <color name="colorMenu">#f7efe5</color>
     <color name="colorHintGray">#697471</color>
     <color name="colorTransparent">#00000000</color>
 </resources>

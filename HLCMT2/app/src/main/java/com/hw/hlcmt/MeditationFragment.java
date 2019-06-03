@@ -14,10 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -25,23 +22,26 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.hw.hlcmt.JavaRepositories.CollectionName;
+import com.hw.hlcmt.JavaRepositories.Language;
 import com.hw.hlcmt.JavaRepositories.MTAdapter;
+import com.hw.hlcmt.JavaRepositories.MTComparator;
 import com.hw.hlcmt.JavaRepositories.MessageModel;
 import com.hw.hlcmt.JavaRepositories.UserModel;
 import com.hw.hlcmt.JavaRepositories.UserType;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class MeditationFragment extends Fragment {
-    private final FirebaseAuth fbAuth = FirebaseAuth.getInstance();
-
     private RecyclerView mtRecyclerView;
-    private MTAdapter mtAdapter;
+    public MTAdapter mtAdapter;
     private RecyclerView.LayoutManager mtLayoutManager;
     private FloatingActionButton btnAddMT;
     private FloatingActionButton btnAdmin;
 
+    private UserModel currentUser;
     private ArrayList<MessageModel> MTList = new ArrayList<>();
     private CollectionReference messages = FirebaseFirestore.getInstance().collection(CollectionName.Messages);
     public static final String MESSAGE_JSON = "MessageModel";
@@ -55,7 +55,16 @@ public class MeditationFragment extends Fragment {
         btnAddMT.hide();
         btnAdmin.hide();
 
-        getUser();
+        Intent i = getActivity().getIntent();
+        String userJSON = i.getStringExtra(MainActivity.LOGGED_IN_USER);
+        currentUser = (new Gson()).fromJson(userJSON, UserModel.class);
+
+        if(currentUser != null){
+            if(currentUser.isAdmin() || currentUser.isWriter())
+                btnAddMT.show();
+            if(currentUser.isAdmin())
+                btnAdmin.show();
+        }
 
         buildRecyclerView(v);
 
@@ -78,51 +87,34 @@ public class MeditationFragment extends Fragment {
                             if(m.getMsgId().equals(tempMsg.getMsgId()))
                                 exists = true;
 
-                        if(!exists)
-                            MTList.add(tempMsg);
+                        if(!exists) {
+                            if (currentUser.isEnglish() && tempMsg.getLanguage().equals(Language.English.toString()))
+                                MTList.add(tempMsg);
+                            if (currentUser.isSiswati() && tempMsg.getLanguage().equals(Language.Siswati.toString()))
+                                MTList.add(tempMsg);
+                        }
                     }
-
-                    //mAdapter.
-                    Log.d("MTList", "Length - " + MTList.size());
-                    mtAdapter.notifyDataSetChanged();
                 }
+                Collections.sort(MTList, new MTComparator());
+                mtAdapter.notifyDataSetChanged();
             }
         });
 
         btnAddMT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getContext(), WriteMeditationTimes.class);
+                Intent i = new Intent(getContext(), WriteMeditationTimes.class)
+                        .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser));
                 startActivity(i);
+                getActivity().finish();
             }
         });
 
         return v;
     }
 
-    private void getUser(){
-        FirebaseFirestore ff = FirebaseFirestore.getInstance();
-        final String loginId = fbAuth.getUid();
-
-        final DocumentReference user = ff.document(CollectionName.User+"/"+loginId);
-        user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                UserModel userModel = documentSnapshot.toObject(UserModel.class);
-
-                if(userModel != null){
-                    if(userModel.getUserType().equals(UserType.ADMIN) ||
-                            userModel.getUserType().equals(UserType.WRITER))
-                        btnAddMT.show();
-                    if(userModel.getUserType().equals(UserType.ADMIN))
-                        btnAdmin.show();
-                }
-            }
-        });
-    }
-
     private void buildRecyclerView(View v){
-        mtRecyclerView = v.findViewById(R.id.recyclerView);
+        mtRecyclerView = v.findViewById(R.id.MTRecyclerView);
         mtRecyclerView.setHasFixedSize(true);
         mtLayoutManager = new LinearLayoutManager(getContext());
         mtAdapter = new MTAdapter(MTList);
@@ -135,12 +127,15 @@ public class MeditationFragment extends Fragment {
             public void onItemClick(int position) {
                 MessageModel message = MTList.get(position);
                 String messageJSON = (new Gson()).toJson(message);
+                String userJSON = (new Gson()).toJson(currentUser);
 
                 Log.d("MTItem", "Item - "+messageJSON);
 
                 Intent i = new Intent(getContext(), ViewMeditationTimes.class);
                 i.putExtra(MESSAGE_JSON, messageJSON);
+                i.putExtra(MainActivity.LOGGED_IN_USER, userJSON);
                 startActivity(i);
+                getActivity().finish();
             }
         });
     }

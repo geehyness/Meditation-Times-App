@@ -21,17 +21,23 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 import com.hw.hlcmt.JavaRepositories.CollectionName;
 import com.hw.hlcmt.JavaRepositories.UserModel;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
     private final FirebaseAuth fbAuth = FirebaseAuth.getInstance();
     private DrawerLayout drawer;
+    private UserModel currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        Intent i = getIntent();
+        String userJSON = i.getStringExtra(MainActivity.LOGGED_IN_USER);
+        currentUser = (new Gson()).fromJson(userJSON, UserModel.class);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -50,28 +56,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             navigationView.setCheckedItem(R.id.nav_message);
         }
 
-        getUser();
-    }
-
-    private void getUser(){
-        FirebaseFirestore ff = FirebaseFirestore.getInstance();
-        final String loginId = fbAuth.getUid();
-        String ref = CollectionName.User+"/"+loginId;
-
-        final DocumentReference user = ff.document(ref);
-        user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                UserModel userModel = documentSnapshot.toObject(UserModel.class);
-
-                if(userModel != null){
-                    TextView name = findViewById(R.id.tvUserInfoName);
-                    TextView email = findViewById(R.id.tvUserInfoEmail);
-                    name.setText(userModel.getName());
-                    email.setText(userModel.getEmail());
-                }
-            }
-        });
+        /*TextView name = findViewById(R.id.tvUserInfoName);
+        name.setText(currentUser.getName());
+        TextView email = findViewById(R.id.tvUserInfoEmail);
+        email.setText(currentUser.getEmail());*/
     }
 
     @Override

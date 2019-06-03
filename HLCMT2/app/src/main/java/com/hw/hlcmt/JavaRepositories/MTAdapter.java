@@ -12,7 +12,7 @@ import com.hw.hlcmt.R;
 
 import java.util.ArrayList;
 
-public class MTAdapter extends RecyclerView.Adapter<MTAdapter.ExampleViewHolder> {
+public class MTAdapter extends RecyclerView.Adapter<MTAdapter.CommentViewHolder> {
     private ArrayList<MessageModel> MTList;
     private OnItemClickListener mtListener;
 
@@ -24,13 +24,13 @@ public class MTAdapter extends RecyclerView.Adapter<MTAdapter.ExampleViewHolder>
         mtListener = listener;
     }
 
-    public static class ExampleViewHolder extends RecyclerView.ViewHolder {
+    public static class CommentViewHolder extends RecyclerView.ViewHolder {
         public ImageView mtIconView;
         public TextView mtTitleView;
         public TextView mtAuthorView;
         public TextView mtWeekView;
 
-        public ExampleViewHolder(View itemView, final OnItemClickListener listener) {
+        public CommentViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
             mtIconView = itemView.findViewById(R.id.mtImage);
             mtTitleView = itemView.findViewById(R.id.mtTitle);
@@ -57,20 +57,20 @@ public class MTAdapter extends RecyclerView.Adapter<MTAdapter.ExampleViewHolder>
 
     @NonNull
     @Override
-    public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.mt_item, viewGroup, false);
-        ExampleViewHolder evh = new ExampleViewHolder(v, mtListener);
+        CommentViewHolder evh = new CommentViewHolder(v, mtListener);
         return evh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ExampleViewHolder exampleViewHolder, int i) {
+    public void onBindViewHolder(@NonNull CommentViewHolder commentViewHolder, int i) {
         MessageModel currentItem = MTList.get(i);
 
-        exampleViewHolder.mtIconView.setImageResource(currentItem.getImageResource());
-        exampleViewHolder.mtTitleView.setText(currentItem.getTitle());
-        exampleViewHolder.mtAuthorView.setText(currentItem.getAuthor()+" ("+currentItem.getDate()+")");
-        exampleViewHolder.mtWeekView.setText("Week "+currentItem.getWeek() + " - " + currentItem.getYear());
+        commentViewHolder.mtIconView.setImageResource(currentItem.getImageResource());
+        commentViewHolder.mtTitleView.setText(currentItem.getTitle());
+        commentViewHolder.mtAuthorView.setText("by "+currentItem.getAuthor()+" ("+currentItem.getDate()+")");
+        commentViewHolder.mtWeekView.setText("Week "+currentItem.getWeek() + " - " + currentItem.getYear());
     }
 
     @Override
