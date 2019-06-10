@@ -11,7 +11,12 @@
         android:roundIcon="@drawable/ic_meditation_times"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DeleteAccountActivity"></activity>
+        <activity android:name=".TermsActivity"></activity>
+        <activity android:name=".PrivacyActivity" />
+        <activity android:name=".UpdateUserActivity" />
+        <activity android:name=".UserManagementActivity" />
+        <activity android:name=".InformationActivity" />
+        <activity android:name=".DeleteAccountActivity" />
         <activity android:name=".ViewMeditationTimes" />
         <activity android:name=".WriteMeditationTimes" />
         <activity android:name=".EmailVerifyActivity" />

@@ -155,7 +155,8 @@ public class ViewMeditationTimes extends AppCompatActivity {
 
     private void editMessage(){
         Intent i = new Intent(this, WriteMeditationTimes.class);
-        i.putExtra(MeditationFragment.MESSAGE_JSON, (new Gson()).toJson(message));
+        i.putExtra(MeditationFragment.MESSAGE_JSON, (new Gson()).toJson(message))
+            .putExtra(MainActivity.LOGGED_IN_USER, (new Gson().toJson(currentUser)));
         startActivity(i);
         finish();
     }
@@ -242,6 +243,38 @@ public class ViewMeditationTimes extends AppCompatActivity {
             public void onItemClick(int position) {
                 CommentModel commentModel = commentList.get(position);
 
+                if (commentModel.getUserId().equals(currentUser.getUserId())){
+                    final DocumentReference commentRef = FirebaseFirestore.getInstance().document(CollectionName.Comments+"/"+commentModel.getCommentId());
+
+                    new AlertDialog.Builder(ViewMeditationTimes.this, R.style.MyDialogTheme)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Delete Comment?")
+                            .setMessage("This action cannot be reversed! Do you wish to continue?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    commentRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(ViewMeditationTimes.this, "Comment Deleted!", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(ViewMeditationTimes.this, ViewMeditationTimes.class)
+                                                .putExtra(MeditationFragment.MESSAGE_JSON, (new Gson()).toJson(message))
+                                                .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser)));
+                                            finish();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(ViewMeditationTimes.this, "Unable to delete message!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                }
                 Log.d("MTItem", "Item - "+commentModel.getUserId());
             }
         });

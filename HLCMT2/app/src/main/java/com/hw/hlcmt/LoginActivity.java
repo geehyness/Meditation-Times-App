@@ -136,44 +136,43 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         try{
             fbAuth.signInWithEmailAndPassword(uemail, upass)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        FirebaseFirestore ff = FirebaseFirestore.getInstance();
+                        final String loginId = fbAuth.getUid();
 
-                            if (task.isSuccessful()) {
-
-                                FirebaseFirestore ff = FirebaseFirestore.getInstance();
-                                final String loginId = fbAuth.getUid();
-
-                                DocumentReference user = ff.document(CollectionName.User+"/"+loginId);
-                                user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        progressDialog.dismiss();
-                                        UserModel userModel = documentSnapshot.toObject(UserModel.class);
-                                        Toast.makeText(LoginActivity.this, "Welcome back " + userModel.getName(), Toast.LENGTH_SHORT).show();
-
-                                        String userJSON = (new Gson()).toJson(userModel);
-                                        Intent i = new Intent(LoginActivity.this, HomeActivity.class);
-                                        i.putExtra(MainActivity.LOGGED_IN_USER, userJSON);
-                                        startActivity(i);
-                                        LoginActivity.this.finish();
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        progressDialog.dismiss();
-                                        fbAuth.signOut();
-                                        Toast.makeText(LoginActivity.this, "Error - " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-
-                            } else {
+                        DocumentReference user = ff.document(CollectionName.User+"/"+loginId);
+                        user.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 progressDialog.dismiss();
-                                Toast.makeText(LoginActivity.this, "Login Failed. Try again later!", Toast.LENGTH_LONG).show();
+                                UserModel userModel = documentSnapshot.toObject(UserModel.class);
+                                Toast.makeText(LoginActivity.this, "Welcome back " + userModel.getName(), Toast.LENGTH_SHORT).show();
+
+                                String userJSON = (new Gson()).toJson(userModel);
+                                Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                                i.putExtra(MainActivity.LOGGED_IN_USER, userJSON);
+                                startActivity(i);
+                                LoginActivity.this.finish();
                             }
-                        }
-                    });
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                progressDialog.dismiss();
+                                fbAuth.signOut();
+                                Toast.makeText(LoginActivity.this, "Error - " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    progressDialog.dismiss();
+                    Toast.makeText(LoginActivity.this, "Error - " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+
         } catch (Exception e){
             progressDialog.dismiss();
             Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();

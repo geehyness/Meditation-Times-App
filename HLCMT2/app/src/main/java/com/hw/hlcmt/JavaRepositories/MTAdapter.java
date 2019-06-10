@@ -69,7 +69,7 @@ public class MTAdapter extends RecyclerView.Adapter<MTAdapter.CommentViewHolder>
 
         commentViewHolder.mtIconView.setImageResource(currentItem.getImageResource());
         commentViewHolder.mtTitleView.setText(currentItem.getTitle());
-        commentViewHolder.mtAuthorView.setText("by "+currentItem.getAuthor()+" ("+currentItem.getDate()+")");
+        commentViewHolder.mtAuthorView.setText("by "+currentItem.getAuthor());
         commentViewHolder.mtWeekView.setText("Week "+currentItem.getWeek() + " - " + currentItem.getYear());
     }
 

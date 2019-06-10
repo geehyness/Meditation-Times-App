@@ -11,6 +11,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,9 +45,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         Button reg = findViewById(R.id.btnRegister);
         TextView login = findViewById(R.id.tvLogin);
+        TextView terms = findViewById(R.id.tvTnC);
+        TextView privacy = findViewById(R.id.tvPP);
 
         reg.setOnClickListener(this);
         login.setOnClickListener(this);
+        terms.setOnClickListener(this);
+        privacy.setOnClickListener(this);
 
         /*final ProgressDialog progressBar = new ProgressDialog(this);
         progressBar.setMessage("Checking user status");
@@ -65,6 +70,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         if (v == findViewById(R.id.tvLogin)){
             startActivity(new Intent(this, LoginActivity.class));
             finish();
+        }
+        if(v == findViewById(R.id.tvTnC)){
+            startActivity(new Intent(this, TermsActivity.class));
+        }
+        if(v == findViewById(R.id.tvPP)){
+            startActivity(new Intent(this, PrivacyActivity.class));
         }
     }
 
@@ -127,13 +138,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
+        CheckBox tnc = findViewById(R.id.cbTnC);
+        CheckBox pp = findViewById(R.id.cbPP);
 
+        if(!tnc.isChecked()){
+            Toast.makeText(RegisterActivity.this, "You have to agree to the Terms & Conditions before you continue.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(!pp.isChecked()){
+            Toast.makeText(RegisterActivity.this, "You have to agree to the Privacy Policy before you continue.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-
-/**
- *
- *
- */
         final MyProgressDialog progressDialog = new MyProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
@@ -152,7 +168,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     progressDialog.dismiss();
-                                    Toast.makeText(RegisterActivity.this, "Registration Successful. Follow link in uemail to verify your uemail address!", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(RegisterActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(RegisterActivity.this, EmailVerifyActivity.class));
                                     finish();
                                 }

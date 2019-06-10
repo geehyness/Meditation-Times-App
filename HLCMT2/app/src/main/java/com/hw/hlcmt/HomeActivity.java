@@ -14,21 +14,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
-import com.hw.hlcmt.JavaRepositories.CollectionName;
 import com.hw.hlcmt.JavaRepositories.UserModel;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
     private final FirebaseAuth fbAuth = FirebaseAuth.getInstance();
     private DrawerLayout drawer;
     private UserModel currentUser;
+
+    private TextView nameTV;
+    private TextView emailTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +53,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             navigationView.setCheckedItem(R.id.nav_message);
         }
 
-        /*TextView name = findViewById(R.id.tvUserInfoName);
-        name.setText(currentUser.getName());
-        TextView email = findViewById(R.id.tvUserInfoEmail);
-        email.setText(currentUser.getEmail());*/
+        nameTV = findViewById(R.id.tvNavUname);
+        emailTV = findViewById(R.id.tvNavEmail);
+
+        //nameTV.setText(currentUser.getName());
+        //emailTV.setText(currentUser.getEmail());
     }
 
     @Override
@@ -109,12 +107,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         new ProfileFragment()).commit();
                 break;
             case R.id.nav_info:
-                Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, InformationActivity.class)
+                        .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser)));
+                finish();
                 break;
             case R.id.nav_logout:
                 fbAuth.signOut();
-                finish();
                 startActivity(new Intent(this, LoginActivity.class));
+                finish();
                 break;
         }
 

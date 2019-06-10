@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -23,6 +24,10 @@ public class EmailVerifyActivity extends AppCompatActivity {
 
         //TextView tv = findViewById(R.id.textView4);
         //tv.setText("UID 1 - " + id + "\nUID2 - " + id2 + "\nEmail - " + email);
+
+        TextView verifyInfo = findViewById(R.id.tvUserInfoVerify);
+
+        verifyInfo.setText("When you tap the 'CONTINUE' button you will be redirected to the login page. Feel free to login and experience in full what this app has to offer.\n\nEnjoy!");
 
         Button confirm = findViewById(R.id.btnConfirmEmail);
         confirm.setOnClickListener(new View.OnClickListener() {

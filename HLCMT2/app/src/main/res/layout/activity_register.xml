@@ -53,6 +53,7 @@
             android:layout_marginBottom="32dp"
             android:text="Login"
             android:textColor="@color/colorAccent"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -62,7 +63,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:hint="Full Name"
@@ -122,7 +123,7 @@
             android:text="Register"
             app:layout_constraintBottom_toTopOf="@+id/tvLogin"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtRegPassword" />
+            app:layout_constraintTop_toBottomOf="@+id/cbPP" />
 
         <View
             android:id="@+id/divider7"
@@ -147,6 +148,48 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_meditation_times" />
+
+        <CheckBox
+            android:id="@+id/cbTnC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Agree to"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtRegPassword" />
+
+        <CheckBox
+            android:id="@+id/cbPP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Agree to"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cbTnC" />
+
+        <TextView
+            android:id="@+id/tvTnC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Terms &amp; Conditions"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/cbTnC"
+            app:layout_constraintStart_toEndOf="@+id/cbTnC"
+            app:layout_constraintTop_toTopOf="@+id/cbTnC" />
+
+        <TextView
+            android:id="@+id/tvPP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Privacy Policy"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/cbPP"
+            app:layout_constraintStart_toEndOf="@+id/cbPP"
+            app:layout_constraintTop_toTopOf="@+id/cbPP" />
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

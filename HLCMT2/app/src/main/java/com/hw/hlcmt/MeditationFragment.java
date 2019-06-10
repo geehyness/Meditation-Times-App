@@ -110,6 +110,16 @@ public class MeditationFragment extends Fragment {
             }
         });
 
+        btnAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), UserManagementActivity.class)
+                        .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser));
+                startActivity(i);
+                getActivity().finish();
+            }
+        });
+
         return v;
     }
 
