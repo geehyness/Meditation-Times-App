@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
-    tools:context=".RegisterActivity">
+    tools:context=".JavaActivities.UserManagement.RegisterActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bg_gradient"
-        tools:context=".RegisterActivity">
+        tools:context=".JavaActivities.UserManagement.RegisterActivity">
 
         <ImageView
             android:id="@+id/imageView2"
@@ -21,7 +21,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@color/colorBg" />
+            app:srcCompat="@color/colorBgDark" />
 
         <TextView
             android:id="@+id/textView2"
@@ -52,7 +52,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="32dp"
             android:text="Login"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorPrimary"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -121,6 +121,8 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:text="Register"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/colorTextHeader"
             app:layout_constraintBottom_toTopOf="@+id/tvLogin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cbPP" />
@@ -147,7 +149,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_meditation_times" />
+            app:srcCompat="@drawable/ic_mt" />
 
         <CheckBox
             android:id="@+id/cbTnC"

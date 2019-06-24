@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
-    tools:context=".ViewMeditationTimes">
+    tools:context=".JavaActivities.MeditationTimes.ViewMeditationTimes">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:background="@drawable/bg_gradient"
-        tools:context=".ViewMeditationTimes">
+        tools:context=".JavaActivities.MeditationTimes.ViewMeditationTimes">
 
         <TextView
             android:id="@+id/tvDeleteMessage"
@@ -36,7 +36,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@color/colorBg" />
+            app:srcCompat="@color/colorBgDark" />
 
         <TextView
             android:id="@+id/tvViewDate"
@@ -119,6 +119,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="Comment"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/colorTextHeader"
             app:layout_constraintBottom_toBottomOf="@+id/txtComment"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/txtComment" />

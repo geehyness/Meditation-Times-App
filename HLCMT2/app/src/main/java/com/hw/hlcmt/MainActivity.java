@@ -12,9 +12,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
-import com.hw.hlcmt.JavaRepositories.CollectionName;
-import com.hw.hlcmt.JavaRepositories.UserModel;
-import com.hw.hlcmt.JavaRepositories.UserType;
+import com.hw.hlcmt.JavaActivities.Dashboard.HomeActivity;
+import com.hw.hlcmt.JavaRepositories.Fixed.CollectionName;
+import com.hw.hlcmt.JavaRepositories.Models.UserModel;
+import com.hw.hlcmt.JavaActivities.UserManagement.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 

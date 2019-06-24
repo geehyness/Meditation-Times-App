@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UpdateUserActivity">
+    tools:context=".JavaActivities.Admin.UpdateUserActivity">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@color/colorBg" />
+        app:srcCompat="@color/colorBgDark" />
 
     <TextView
         android:id="@+id/tvUIUsername"
@@ -79,6 +79,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:text="Save Changes"
+        android:textColor="@color/colorTextHeader"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/swIsWriter" />
 

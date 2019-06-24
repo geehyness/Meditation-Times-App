@@ -6,14 +6,14 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context=".WriteMeditationTimes">
+    tools:context=".JavaActivities.MeditationTimes.WriteMeditationTimes">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        tools:context=".WriteMeditationTimes">
+        tools:context=".JavaActivities.MeditationTimes.WriteMeditationTimes">
 
         <ImageView
             android:id="@+id/imageView2"
@@ -23,7 +23,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@color/colorBg" />
+            app:srcCompat="@color/colorBgDark" />
 
         <Button
             android:id="@+id/btnPostMT"
@@ -33,6 +33,8 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="24dp"
             android:text="Post"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/colorTextHeader"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

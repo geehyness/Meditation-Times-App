@@ -6,25 +6,30 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_meditation_times"
+        android:icon="@drawable/ic_mt"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/ic_meditation_times"
+        android:roundIcon="@drawable/ic_mt"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TermsActivity"></activity>
-        <activity android:name=".PrivacyActivity" />
-        <activity android:name=".UpdateUserActivity" />
-        <activity android:name=".UserManagementActivity" />
-        <activity android:name=".InformationActivity" />
-        <activity android:name=".DeleteAccountActivity" />
-        <activity android:name=".ViewMeditationTimes" />
-        <activity android:name=".WriteMeditationTimes" />
-        <activity android:name=".EmailVerifyActivity" />
-        <activity
-            android:name=".HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".RegisterActivity" />
+        <activity android:name=".JavaActivities.Admin.AdminActivity"></activity>
+        <activity android:name=".JavaActivities.Dashboard.Items.HelpActivity" />
+        <activity android:name=".JavaActivities.Dashboard.Items.ProfileActivity" />
+        <activity android:name=".JavaActivities.Dashboard.Items.SettingsActivity" />
+        <activity android:name=".JavaActivities.Dashboard.Items.PrayerReqActivity" />
+        <activity android:name=".JavaActivities.Dashboard.Items.AudioMSGActivity" />
+        <activity android:name=".JavaActivities.Dashboard.Items.MeditationTimesActivity" />
+        <activity android:name=".JavaActivities.AppSpecific.TermsActivity" />
+        <activity android:name=".JavaActivities.AppSpecific.PrivacyActivity" />
+        <activity android:name=".JavaActivities.Admin.UpdateUserActivity" />
+        <activity android:name=".JavaActivities.Admin.UserManagementActivity" />
+        <activity android:name=".JavaActivities.AppSpecific.InformationActivity" />
+        <activity android:name=".JavaActivities.UserManagement.DeleteAccountActivity" />
+        <activity android:name=".JavaActivities.MeditationTimes.ViewMeditationTimes" />
+        <activity android:name=".JavaActivities.MeditationTimes.WriteMeditationTimes" />
+        <activity android:name=".JavaActivities.UserManagement.EmailVerifyActivity" />
+        <activity android:name=".JavaActivities.Dashboard.HomeActivity" />
+        <activity android:name=".JavaActivities.UserManagement.LoginActivity" />
+        <activity android:name=".JavaActivities.UserManagement.RegisterActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

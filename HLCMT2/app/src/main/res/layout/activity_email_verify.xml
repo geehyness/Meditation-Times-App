@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
-    tools:context=".EmailVerifyActivity">
+    tools:context=".JavaActivities.UserManagement.EmailVerifyActivity">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@color/colorBg" />
+        app:srcCompat="@color/colorBgDark" />
 
     <TextView
         android:id="@+id/tvUserInfoVerify"
