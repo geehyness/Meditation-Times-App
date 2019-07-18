@@ -72,13 +72,6 @@ public class UserManagementActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(UserManagementActivity.this, HomeActivity.class)
-                .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentAdminUser)));
-        finish();
-    }
-
     private void buildRecyclerView(){
         userRecycler = findViewById(R.id.userRecyclerView);
         userRecycler.setHasFixedSize(true);

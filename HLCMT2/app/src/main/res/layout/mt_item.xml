@@ -45,23 +45,13 @@
             android:id="@+id/mtAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/mtTitle"
+            android:layout_below="@+id/mtDate"
             android:layout_marginStart="4dp"
-            android:layout_toEndOf="@+id/authorDivider"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/mtImage"
             android:text="Line 2"
             android:textAllCaps="false"
             android:textSize="15sp" />
-
-        <View
-            android:id="@+id/authorDivider"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/mtTitle"
-            android:layout_marginStart="4dp"
-            android:layout_alignBottom="@+id/mtDate"
-            android:layout_marginBottom="-672dp"
-            android:layout_toEndOf="@+id/mtDate"
-            android:background="?android:attr/listDivider" />
 
     </RelativeLayout>
 

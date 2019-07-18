@@ -28,7 +28,7 @@
                 android:layout_marginEnd="8dp"
                 android:text="Meditation Times Dashboard"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textSize="36sp"
+                android:textSize="36dp"
                 app:layout_constraintEnd_toStartOf="@+id/btnDBAdmin"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -41,7 +41,7 @@
                 android:layout_marginBottom="16dp"
                 android:text="Menu Selection"
                 android:textColor="@color/colorAccent"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtDashboard" />
@@ -76,11 +76,11 @@
 
                 <LinearLayout
                     android:id="@+id/btnDBMtMSG"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <ImageView
                         android:layout_width="80dp"
@@ -89,17 +89,15 @@
                         app:srcCompat="@drawable/mt" />
 
                     <TextView
-                        android:layout_marginTop="12dp"
-                        android:textSize="18sp"
-                        android:text="Meditation Times"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Meditation Times"
+                        android:textSize="18dp" />
 
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
-
-            <!--Second-->
 
             <android.support.v7.widget.CardView
                 android:layout_width="wrap_content"
@@ -112,11 +110,11 @@
 
                 <LinearLayout
                     android:id="@+id/btnDBAudioMSG"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <ImageView
                         android:layout_width="80dp"
@@ -124,11 +122,11 @@
                         app:srcCompat="@drawable/audio" />
 
                     <TextView
-                        android:layout_marginTop="12dp"
-                        android:textSize="18sp"
-                        android:text="Audio Messages"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Audio Messages"
+                        android:textSize="18dp" />
 
                 </LinearLayout>
 
@@ -145,11 +143,11 @@
 
                 <LinearLayout
                     android:id="@+id/btnDBPrayerReq"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <ImageView
                         android:layout_width="80dp"
@@ -157,17 +155,15 @@
                         app:srcCompat="@drawable/pray" />
 
                     <TextView
-                        android:layout_marginTop="12dp"
-                        android:textSize="18sp"
-                        android:text="Prayer Requests"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Prayer Requests"
+                        android:textSize="18dp" />
 
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
-
-            <!--Second-->
 
             <android.support.v7.widget.CardView
                 android:layout_width="wrap_content"
@@ -180,11 +176,11 @@
 
                 <LinearLayout
                     android:id="@+id/btnDBAppSettings"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <ImageView
                         android:layout_width="80dp"
@@ -192,11 +188,11 @@
                         app:srcCompat="@drawable/settings" />
 
                     <TextView
-                        android:layout_marginTop="12dp"
-                        android:textSize="18sp"
-                        android:text="Settings"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Settings"
+                        android:textSize="18dp" />
 
                 </LinearLayout>
 
@@ -213,11 +209,11 @@
 
                 <LinearLayout
                     android:id="@+id/btnDBProfile"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <ImageView
                         android:layout_width="80dp"
@@ -225,17 +221,15 @@
                         app:srcCompat="@drawable/profile" />
 
                     <TextView
-                        android:layout_marginTop="12dp"
-                        android:textSize="18sp"
-                        android:text="Profile"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Profile"
+                        android:textSize="18dp" />
 
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
-
-            <!--Second-->
 
             <android.support.v7.widget.CardView
                 android:layout_width="wrap_content"
@@ -248,11 +242,11 @@
 
                 <LinearLayout
                     android:id="@+id/btnDBHelp"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <ImageView
                         android:layout_width="80dp"
@@ -260,11 +254,11 @@
                         app:srcCompat="@drawable/help" />
 
                     <TextView
-                        android:layout_marginTop="12dp"
-                        android:textSize="18sp"
-                        android:text="Help"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Help"
+                        android:textSize="18dp" />
 
                 </LinearLayout>
 
