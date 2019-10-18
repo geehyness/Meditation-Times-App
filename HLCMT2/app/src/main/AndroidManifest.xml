@@ -13,34 +13,33 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.Admin.AdminActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.Dashboard.Items.HelpActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.Dashboard.Items.ProfileActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.Dashboard.Items.SettingsActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.Dashboard.Items.PrayerReqActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.Dashboard.Items.AudioMSGActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.Dashboard.Items.MeditationTimesActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.AppSpecific.TermsActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.AppSpecific.PrivacyActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.Admin.UpdateUserActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.Admin.UserManagementActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.AppSpecific.InformationActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.UserManagement.DeleteAccountActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.MeditationTimes.ViewMeditationTimes" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.MeditationTimes.WriteMeditationTimes" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.UserManagement.EmailVerifyActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.Dashboard.HomeActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.UserManagement.LoginActivity" />
-        <activity android:name="com.yukisoft.hlcmt.JavaActivities.UserManagement.RegisterActivity" />
-
-        <activity android:name="com.yukisoft.hlcmt.MainActivity">
+        <activity android:name=".JavaActivities.AudioMessages.AddAudioActivity"></activity>
+        <activity android:name=".JavaActivities.Admin.AdminActivity" />
+        <activity android:name=".JavaActivities.Dashboard.Items.HelpActivity" />
+        <activity android:name=".JavaActivities.Dashboard.Items.ProfileActivity" />
+        <activity android:name=".JavaActivities.Dashboard.Items.SettingsActivity" />
+        <activity android:name=".JavaActivities.Dashboard.Items.PrayerReqActivity" />
+        <activity android:name=".JavaActivities.Dashboard.Items.AudioMSGActivity" />
+        <activity android:name=".JavaActivities.Dashboard.Items.MeditationTimesActivity" />
+        <activity android:name=".JavaActivities.AppSpecific.TermsActivity" />
+        <activity android:name=".JavaActivities.AppSpecific.PrivacyActivity" />
+        <activity android:name=".JavaActivities.Admin.UpdateUserActivity" />
+        <activity android:name=".JavaActivities.Admin.UserManagementActivity" />
+        <activity android:name=".JavaActivities.AppSpecific.InformationActivity" />
+        <activity android:name=".JavaActivities.UserManagement.DeleteAccountActivity" />
+        <activity android:name=".JavaActivities.MeditationTimes.ViewMeditationTimes" />
+        <activity android:name=".JavaActivities.MeditationTimes.WriteMeditationTimes" />
+        <activity android:name=".JavaActivities.UserManagement.EmailVerifyActivity" />
+        <activity android:name=".JavaActivities.Dashboard.HomeActivity" />
+        <activity android:name=".JavaActivities.UserManagement.LoginActivity" />
+        <activity android:name=".JavaActivities.UserManagement.RegisterActivity" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

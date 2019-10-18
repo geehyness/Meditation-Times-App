@@ -1,11 +1,7 @@
 package com.yukisoft.hlcmt.JavaActivities.Dashboard.Items;
 
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,26 +9,30 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.yukisoft.hlcmt.JavaActivities.Dashboard.HomeActivity;
-import com.yukisoft.hlcmt.JavaRepositories.Fixed.CollectionName;
-import com.yukisoft.hlcmt.JavaRepositories.Fixed.Language;
+import com.yukisoft.hlcmt.JavaActivities.MeditationTimes.ViewMeditationTimes;
+import com.yukisoft.hlcmt.JavaActivities.MeditationTimes.WriteMeditationTimes;
 import com.yukisoft.hlcmt.JavaRepositories.Adapters.MTAdapter;
 import com.yukisoft.hlcmt.JavaRepositories.Comparators.MTComparator;
+import com.yukisoft.hlcmt.JavaRepositories.Fixed.CollectionName;
+import com.yukisoft.hlcmt.JavaRepositories.Fixed.Language;
 import com.yukisoft.hlcmt.JavaRepositories.Models.MessageModel;
 import com.yukisoft.hlcmt.JavaRepositories.Models.UserModel;
 import com.yukisoft.hlcmt.MainActivity;
 import com.yukisoft.hlcmt.R;
-import com.yukisoft.hlcmt.JavaActivities.MeditationTimes.ViewMeditationTimes;
-import com.yukisoft.hlcmt.JavaActivities.MeditationTimes.WriteMeditationTimes;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +46,6 @@ public class MeditationTimesActivity extends AppCompatActivity {
     private FloatingActionButton btnAddMT;
 
     private Spinner yearPicker;
-    private ImageView btnSearch;
     private EditText txtSearch;
 
     private ArrayList<MessageModel> MTList = new ArrayList<>();
@@ -58,7 +57,7 @@ public class MeditationTimesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meditation_times);
-        btnAddMT = findViewById(R.id.btnAddMT);
+        btnAddMT = findViewById(R.id.btnAddAudio);
         btnAddMT.hide();
 
         Intent i = getIntent();
@@ -204,11 +203,10 @@ public class MeditationTimesActivity extends AppCompatActivity {
     private void initViews(){
         // SEARCH OPTIONS AND YEAR PICKER
         yearPicker = findViewById(R.id.spYear);
-        txtSearch = findViewById(R.id.txtSearch);
-        btnSearch = findViewById(R.id.btnSearch);
+        txtSearch = findViewById(R.id.txtSearchAudio);
 
         // RECYCLER VIEW SETUP
-        mtRecyclerView = findViewById(R.id.MTRecyclerView);
+        mtRecyclerView = findViewById(R.id.audioRecyclerView);
         mtRecyclerView.setHasFixedSize(true);
         mtLayoutManager = new LinearLayoutManager(this);
         mtAdapter = new MTAdapter(displayMTList);

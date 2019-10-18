@@ -7,7 +7,7 @@
     android:background="@drawable/bg_gradient"
     tools:context=".JavaActivities.UserManagement.RegisterActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bg_gradient"
@@ -193,5 +193,5 @@
             app:layout_constraintStart_toEndOf="@+id/cbPP"
             app:layout_constraintTop_toTopOf="@+id/cbPP" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

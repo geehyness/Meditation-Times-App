@@ -3,9 +3,6 @@ package com.yukisoft.hlcmt.JavaActivities.MeditationTimes;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,18 +12,21 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
-import com.yukisoft.hlcmt.JavaActivities.Dashboard.HomeActivity;
 import com.yukisoft.hlcmt.JavaActivities.Dashboard.Items.MeditationTimesActivity;
 import com.yukisoft.hlcmt.JavaRepositories.Fixed.CollectionName;
 import com.yukisoft.hlcmt.JavaRepositories.Fixed.Language;
 import com.yukisoft.hlcmt.JavaRepositories.Models.MessageModel;
-import com.yukisoft.hlcmt.JavaRepositories.UIElements.MyProgressDialog;
 import com.yukisoft.hlcmt.JavaRepositories.Models.UserModel;
+import com.yukisoft.hlcmt.JavaRepositories.UIElements.MyProgressDialog;
 import com.yukisoft.hlcmt.MainActivity;
 import com.yukisoft.hlcmt.R;
 
@@ -56,8 +56,8 @@ public class WriteMeditationTimes extends AppCompatActivity {
         titleUI = findViewById(R.id.txtTitleMT);
         weekUI = findViewById(R.id.txtMTWeek);
         yearUI = findViewById(R.id.txtMsgYear);
-        msgUI = findViewById(R.id.txtMessageMT);
-        langUI = findViewById(R.id.spLanguage);
+        msgUI = findViewById(R.id.txtAudioDetails);
+        langUI = findViewById(R.id.spMTLanguage);
 
         Calendar c = Calendar.getInstance();
         yearUI.setText((String.valueOf(c.get(Calendar.YEAR))));
@@ -90,7 +90,7 @@ public class WriteMeditationTimes extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         langUI.setAdapter(adapter);
 
-        Button post = findViewById(R.id.btnPostMT);
+        Button post = findViewById(R.id.btnUpload);
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +109,7 @@ public class WriteMeditationTimes extends AppCompatActivity {
             {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(WriteMeditationTimes.this, HomeActivity.class)
+                    startActivity(new Intent(WriteMeditationTimes.this, MeditationTimesActivity.class)
                             .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser)));
                     finish();
                 }

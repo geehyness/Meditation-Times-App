@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,17 +7,17 @@
     tools:context=".JavaActivities.Dashboard.Items.MeditationTimesActivity">
 
     <ImageView
-        android:id="@+id/mtListTitleBg"
+        android:id="@+id/audioListTitleBg"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/mtDivider"
+        app:layout_constraintBottom_toTopOf="@+id/audioDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@color/colorBgDark" />
 
     <TextView
-        android:id="@+id/mtTitle"
+        android:id="@+id/audioTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/mtDivider"
+        android:id="@+id/audioDivider"
         android:layout_width="395dp"
         android:layout_height="1dp"
         android:layout_marginStart="0dp"
@@ -39,7 +39,7 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mtTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/audioTitle" />
 
 
     <ImageView
@@ -49,11 +49,11 @@
         app:layout_constraintBottom_toTopOf="@+id/divider11"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mtDivider"
+        app:layout_constraintTop_toBottomOf="@+id/audioDivider"
         app:srcCompat="@color/colorTextHeader" />
 
     <EditText
-        android:id="@+id/txtSearch"
+        android:id="@+id/txtSearchAudio"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -64,8 +64,8 @@
         android:inputType="textPersonName"
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="@+id/imageView4"
-        app:layout_constraintStart_toEndOf="@+id/btnSearch"
-        app:layout_constraintTop_toBottomOf="@+id/mtDivider" />
+        app:layout_constraintStart_toEndOf="@+id/btnSearchAudio"
+        app:layout_constraintTop_toBottomOf="@+id/audioDivider" />
 
     <View
         android:id="@+id/divider11"
@@ -77,16 +77,16 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtSearch" />
+        app:layout_constraintTop_toBottomOf="@+id/txtSearchAudio" />
 
     <ImageView
-        android:id="@+id/btnSearch"
+        android:id="@+id/btnSearchAudio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txtSearch"
+        app:layout_constraintBottom_toBottomOf="@+id/txtSearchAudio"
         app:layout_constraintStart_toStartOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="@+id/txtSearch"
+        app:layout_constraintTop_toTopOf="@+id/txtSearchAudio"
         app:srcCompat="@drawable/ic_search" />
 
     <ImageView
@@ -132,7 +132,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -141,8 +141,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider11">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/MTRecyclerView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/audioRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorBg"
@@ -153,10 +153,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btnAddMT"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnAddAudio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -169,4 +169,4 @@
         app:rippleColor="@color/colorAccent"
         app:srcCompat="@drawable/ic_mt" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

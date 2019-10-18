@@ -1,12 +1,13 @@
 package com.yukisoft.hlcmt.JavaRepositories.Adapters;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.yukisoft.hlcmt.JavaRepositories.Models.MessageModel;
 import com.yukisoft.hlcmt.R;
@@ -33,7 +34,7 @@ public class MTAdapter extends RecyclerView.Adapter<MTAdapter.CommentViewHolder>
 
         public CommentViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
-            mtIconView = itemView.findViewById(R.id.mtImage);
+            mtIconView = itemView.findViewById(R.id.mtIcon);
             mtTitleView = itemView.findViewById(R.id.mtTitle);
             mtAuthorView = itemView.findViewById(R.id.mtAuthor);
             mtWeekView = itemView.findViewById(R.id.mtDate);

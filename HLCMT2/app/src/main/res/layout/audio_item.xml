@@ -13,30 +13,42 @@
         android:layout_margin="4dp">
 
         <ImageView
-            android:id="@+id/userListPic"
+            android:id="@+id/audioIcon"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:padding="2dp" />
 
         <TextView
-            android:id="@+id/listUserName"
+            android:id="@+id/audioTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/userListPic"
+            android:layout_toEndOf="@+id/audioIcon"
             android:text="Line 1"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/listUserEmail"
+            android:id="@+id/audioDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/listUserName"
+            android:layout_below="@+id/audioTitle"
             android:layout_marginStart="4dp"
-            android:layout_toEndOf="@+id/userListPic"
+            android:layout_toEndOf="@+id/audioIcon"
             android:maxLines="1"
+            android:text="Line 2"
+            android:textAllCaps="false"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/audioSpeaker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/audioDate"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/audioIcon"
             android:text="Line 2"
             android:textAllCaps="false"
             android:textSize="15sp" />
