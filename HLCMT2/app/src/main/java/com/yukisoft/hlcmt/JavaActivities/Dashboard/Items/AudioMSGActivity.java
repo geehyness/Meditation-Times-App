@@ -62,7 +62,7 @@ public class AudioMSGActivity extends AppCompatActivity {
 
         FloatingActionButton upload = findViewById(R.id.btnAddAudio);
         upload.hide();
-        if(currentUser.isAdmin()){
+        if(currentUser!=null && currentUser.isAdmin()){
             upload.show();
         }
 
@@ -94,7 +94,8 @@ public class AudioMSGActivity extends AppCompatActivity {
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(AudioMSGActivity.this, AddAudioActivity.class));
+                startActivity(new Intent(AudioMSGActivity.this, AddAudioActivity.class)
+                        .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser)));
             }
         });
 

@@ -41,6 +41,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
+import com.yukisoft.hlcmt.JavaActivities.Dashboard.Items.AudioMSGActivity;
 import com.yukisoft.hlcmt.JavaActivities.DatePickerFragment;
 import com.yukisoft.hlcmt.JavaRepositories.Fixed.CollectionName;
 import com.yukisoft.hlcmt.JavaRepositories.Models.AudioModel;
@@ -78,6 +79,7 @@ public class AddAudioActivity extends AppCompatActivity implements DatePickerDia
         setContentView(R.layout.activity_add_audio);
 
         currentUser = (new Gson().fromJson(getIntent().getStringExtra(MainActivity.LOGGED_IN_USER), UserModel.class));
+        Log.d("user", currentUser.getName());
 
         storageReference = FirebaseStorage.getInstance().getReference("messages");
 
@@ -269,8 +271,6 @@ public class AddAudioActivity extends AppCompatActivity implements DatePickerDia
                             }
                         }, 5000);
 
-                        Toast.makeText(AddAudioActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
-
                         Calendar calendar = Calendar.getInstance();
 
                         AudioModel upload = new AudioModel(taskSnapshot.getMetadata().getReference().getDownloadUrl().toString(),
@@ -280,7 +280,7 @@ public class AddAudioActivity extends AppCompatActivity implements DatePickerDia
                         ff.collection(CollectionName.Audio).document(title).set(upload).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(AddAudioActivity.this, "Message posted successfully", Toast.LENGTH_LONG).show();
+                                Toast.makeText(AddAudioActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
                                 finish();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -321,7 +321,7 @@ public class AddAudioActivity extends AppCompatActivity implements DatePickerDia
                 {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(AddAudioActivity.this, AudioModel.class)
+                        startActivity(new Intent(AddAudioActivity.this, AudioMSGActivity.class)
                                 .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser)));
                         finish();
                     }
