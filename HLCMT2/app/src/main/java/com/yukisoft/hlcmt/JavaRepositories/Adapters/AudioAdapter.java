@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.yukisoft.hlcmt.JavaRepositories.Models.AudioModel;
 import com.yukisoft.hlcmt.R;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -20,7 +22,7 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.CommentViewH
     private OnItemClickListener audioListener;
 
     public interface OnItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(int position) throws IOException;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -46,7 +48,12 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.CommentViewH
                     if (listener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
+                            try {
+                                listener.onItemClick(position);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                Toast.makeText(v.getContext(), "Unable to play message!\nPlease report error in 'Help' menu.", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 }

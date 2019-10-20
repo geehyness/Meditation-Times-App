@@ -108,33 +108,25 @@ tools:context=".JavaActivities.Dashboard.Items.AudioMSGActivity">
             android:layout_height="1dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="60dp"
             android:background="?android:attr/listDivider"
-            app:layout_constraintBottom_toTopOf="@+id/lblYear"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <Spinner
-            android:id="@+id/spYear"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/lblYear"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/lblYear"
-            app:layout_constraintTop_toTopOf="@+id/lblYear" />
 
         <TextView
             android:id="@+id/lblYear"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="Year"
+            android:layout_marginEnd="16dp"
+            android:text="Select a message to start playing"
             android:textSize="18dp"
+            android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider12" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -179,12 +171,14 @@ tools:context=".JavaActivities.Dashboard.Items.AudioMSGActivity">
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/holo_blue_light"
-        app:behavior_hideable="true"
+        android:background="@color/colorMP"
+        android:clickable="true"
+        app:behavior_hideable="false"
         app:behavior_peekHeight="60dp"
         app:layout_behavior="@string/bottom_sheet_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -199,12 +193,15 @@ tools:context=".JavaActivities.Dashboard.Items.AudioMSGActivity">
                 app:srcCompat="@color/colorBgDark" />
 
             <TextView
-                android:id="@+id/txtSheetTitle"
+                android:id="@+id/lblSheetTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="TextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textColor="@color/colorTextHeader"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/divider15"
                 app:layout_constraintEnd_toStartOf="@+id/btnLike"
                 app:layout_constraintStart_toEndOf="@+id/btnSheetPlay"
@@ -222,25 +219,13 @@ tools:context=".JavaActivities.Dashboard.Items.AudioMSGActivity">
 
             <ImageView
                 android:id="@+id/btnSheetPlay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginStart="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/divider15"
+                app:layout_constraintBottom_toBottomOf="@+id/lblSheetTitle"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_audio_upload" />
-
-            <SeekBar
-                android:id="@+id/seekBar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/textView13"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/textView12"
-                app:layout_constraintTop_toBottomOf="@+id/divider14" />
+                app:layout_constraintTop_toTopOf="@+id/lblSheetTitle"
+                app:srcCompat="@drawable/ic_mp_play_small" />
 
             <View
                 android:id="@+id/divider14"
@@ -252,17 +237,18 @@ tools:context=".JavaActivities.Dashboard.Items.AudioMSGActivity">
                 app:layout_constraintTop_toBottomOf="@+id/imageView11" />
 
             <ImageView
-                android:id="@+id/imageView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/btnPlayPause"
+                android:layout_width="56dp"
+                android:layout_height="0dp"
                 android:layout_marginTop="16dp"
+                app:layout_constraintDimensionRatio="h,1:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/seekBar"
-                app:srcCompat="@drawable/ic_audio" />
+                app:srcCompat="@drawable/ic_mp_play" />
 
             <TextView
-                android:id="@+id/textView12"
+                android:id="@+id/lblPlayTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -272,7 +258,7 @@ tools:context=".JavaActivities.Dashboard.Items.AudioMSGActivity">
                 app:layout_constraintTop_toTopOf="@+id/seekBar" />
 
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/lblPlayLength"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -299,7 +285,63 @@ tools:context=".JavaActivities.Dashboard.Items.AudioMSGActivity">
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider15"
-                app:srcCompat="@android:color/background_dark" />
+                app:srcCompat="@drawable/ic_audio_upload" />
+
+            <ImageView
+                android:id="@+id/btnPrev"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnPlayPause"
+                app:layout_constraintEnd_toStartOf="@+id/btnPlayPause"
+                app:layout_constraintTop_toTopOf="@+id/btnPlayPause"
+                app:srcCompat="@drawable/ic_mp_prev" />
+
+            <ImageView
+                android:id="@+id/btnNext"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnPlayPause"
+                app:layout_constraintStart_toEndOf="@+id/btnPlayPause"
+                app:layout_constraintTop_toTopOf="@+id/btnPlayPause"
+                app:srcCompat="@drawable/ic_mp_skip" />
+
+            <ImageView
+                android:id="@+id/btnRepeat"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnPrev"
+                app:layout_constraintEnd_toStartOf="@+id/btnPrev"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btnPrev"
+                app:srcCompat="@drawable/ic_mp_repeat" />
+
+            <ImageView
+                android:id="@+id/btnShuffle"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnNext"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnNext"
+                app:layout_constraintTop_toTopOf="@+id/btnNext"
+                app:srcCompat="@drawable/ic_mp_shuffle" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                style="@style/Widget.AppCompat.SeekBar"
+                android:thumb="@drawable/custom_seekbar_thumb"
+                android:progressDrawable="@drawable/custom_seekbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:max="10"
+                android:progress="3"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintEnd_toStartOf="@+id/lblPlayLength"
+                app:layout_constraintStart_toEndOf="@+id/lblPlayTime"
+                app:layout_constraintTop_toBottomOf="@+id/divider14" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -307,8 +349,9 @@ tools:context=".JavaActivities.Dashboard.Items.AudioMSGActivity">
             android:id="@+id/bottom_sheet_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:behavior_hideable="true"
-            app:behavior_peekHeight="60dp"
+            android:clickable="true"
+            app:behavior_hideable="false"
+            app:behavior_peekHeight="64dp"
             app:layout_behavior="@string/bottom_sheet_behavior">
 
             <androidx.cardview.widget.CardView
@@ -316,6 +359,8 @@ tools:context=".JavaActivities.Dashboard.Items.AudioMSGActivity">
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:elevation="24dp"
+                android:backgroundTint="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -325,34 +370,56 @@ tools:context=".JavaActivities.Dashboard.Items.AudioMSGActivity">
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/txtDetailsTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:text="TextView"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toTopOf="@+id/txtDetails"
+                    <ImageView
+                        android:id="@+id/btnOpenDetails"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/txtDetailsTitle"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/txtDetailsTitle"
+                        app:srcCompat="@drawable/ic_mp_more" />
+
+                    <View
+                        android:id="@+id/divider16"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="64dp"
+                        android:background="?android:attr/listDivider"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/txtDetails"
+                        android:id="@+id/txtDetailsTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="24dp"
+                        android:maxLines="1"
+                        android:text="TextView"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toTopOf="@+id/divider16"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/btnOpenDetails"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/txtDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="16dp"
                         android:text="TextView"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/divider16" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
             </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

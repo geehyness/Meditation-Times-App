@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".JavaActivities.AudioMessages.AddAudioActivity"></activity>
+        <activity android:name=".JavaActivities.AudioMessages.AddAudioActivity" />
         <activity android:name=".JavaActivities.Admin.AdminActivity" />
         <activity android:name=".JavaActivities.Dashboard.Items.HelpActivity" />
         <activity android:name=".JavaActivities.Dashboard.Items.ProfileActivity" />

@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -53,12 +52,14 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+//import android.net.Uri;
+
 public class AddAudioActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private EditText txtTitle, txtDetails, txtSpeaker, txtDate;
     private TextView fileName;
     private ImageView btnCloseFile;
     private CheckBox setTitle;
-    private Button btnDatePicker;
+    private Button btnDatePicker, btnPickFile;
 
     private final int REQ_CODE_PICK_SOUND_FILE = 1;
     private Uri audioFileUri;
@@ -67,7 +68,7 @@ public class AddAudioActivity extends AppCompatActivity implements DatePickerDia
     private ProgressBar progressBarUpload;
     private StorageTask uploadTask;
 
-    private boolean clearTitle = false;
+    private boolean clearTitle = false, selectingFile = false;
     private Date date;
 
     private UserModel currentUser;
@@ -90,6 +91,7 @@ public class AddAudioActivity extends AppCompatActivity implements DatePickerDia
         btnDatePicker = findViewById(R.id.btnPickDate);
 
         fileName = findViewById(R.id.lblFileName);
+        btnPickFile = findViewById(R.id.btnPickFile);
         btnCloseFile = findViewById(R.id.btnCloseFile);
         Button btnUpload = findViewById(R.id.btnUpload);
         progressBarUpload = findViewById(R.id.progressBar);
@@ -97,17 +99,20 @@ public class AddAudioActivity extends AppCompatActivity implements DatePickerDia
 
         btnCloseFile.setVisibility(View.GONE);
 
-        fileName.setTextColor(getResources().getColor(R.color.colorPrimary));
-        fileName.setText("Upload File");
+        fileName.setTextColor(getResources().getColor(R.color.colorAccent));
+        fileName.setText("No file selected");
 
-        fileName.setOnClickListener(new View.OnClickListener() {
+        btnPickFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent;
-                intent = new Intent();
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.setType("audio/*");
-                startActivityForResult(Intent.createChooser(intent, "Pick audio file"), REQ_CODE_PICK_SOUND_FILE);
+                if (!selectingFile) {
+                    selectingFile = true;
+                    Intent intent;
+                    intent = new Intent();
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent.setType("audio/*");
+                    startActivityForResult(Intent.createChooser(intent, "Pick audio file"), REQ_CODE_PICK_SOUND_FILE);
+                }
             }
         });
 
@@ -115,8 +120,8 @@ public class AddAudioActivity extends AppCompatActivity implements DatePickerDia
             @Override
             public void onClick(View view) {
                 audioFileUri = null;
-                fileName.setTextColor(getResources().getColor(R.color.colorPrimary));
-                fileName.setText("Upload File");
+                fileName.setTextColor(getResources().getColor(R.color.colorAccent));
+                fileName.setText("No file selected");
                 btnCloseFile.setVisibility(View.GONE);
 
                 if (setTitle.isChecked()){
@@ -162,7 +167,7 @@ public class AddAudioActivity extends AppCompatActivity implements DatePickerDia
                         txtSpeaker.setError("Please input the speaker's name.");
                         return;
                     } else {
-                        txtSpeaker.setText(null);
+                        txtSpeaker.setError(null);
                     }
 
                     uploadFile(title, details, date, speaker);
@@ -218,6 +223,8 @@ public class AddAudioActivity extends AppCompatActivity implements DatePickerDia
                 btnCloseFile.setVisibility(View.VISIBLE);
             }
         }
+
+        selectingFile = false;
     }
 
     private String getFileName(Uri audioFileUri){
@@ -258,54 +265,52 @@ public class AddAudioActivity extends AppCompatActivity implements DatePickerDia
 
     private void uploadFile(final String title, final String details, final Date date, final String speaker){
         if (audioFileUri != null){
-            StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + fileExtension(audioFileUri));
+            final StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + fileExtension(audioFileUri));
             uploadTask = fileRef.putFile(audioFileUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                progressBarUpload.setProgress(0);
-                            }
-                        }, 5000);
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Calendar calendar = Calendar.getInstance();
 
-                        Calendar calendar = Calendar.getInstance();
+                                    AudioModel upload = new AudioModel(uri.toString(), title, details, date, calendar.getTime(), speaker);
 
-                        AudioModel upload = new AudioModel(taskSnapshot.getMetadata().getReference().getDownloadUrl().toString(),
-                                title, details, date, calendar.getTime(), speaker);
-
-                        final FirebaseFirestore ff = FirebaseFirestore.getInstance();
-                        ff.collection(CollectionName.Audio).document(title).set(upload).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(AddAudioActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(AddAudioActivity.this, "Error:\n" + e.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-                }). addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(AddAudioActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            progressBarUpload.setProgress((int) progress, true);
-                        } else {
-                            progressBarUpload.setProgress((int) progress);
+                                    final FirebaseFirestore ff = FirebaseFirestore.getInstance();
+                                    ff.collection(CollectionName.Audio).document(title).set(upload).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(AddAudioActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(AddAudioActivity.this, "Error:\n" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+                            });
                         }
-                    }
-                });
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(AddAudioActivity.this, "Unable to upload audio file!\nPlease retry.", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                progressBarUpload.setProgress((int) progress, true);
+                            } else {
+                                progressBarUpload.setProgress((int) progress);
+                            }
+                        }
+                    });
         } else {
             Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
         }
