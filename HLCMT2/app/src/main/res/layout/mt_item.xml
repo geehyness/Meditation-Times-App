@@ -13,7 +13,7 @@
         android:layout_margin="4dp">
 
         <ImageView
-            android:id="@+id/mtIcon"
+            android:id="@+id/catIcon"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:padding="2dp" />

@@ -203,7 +203,7 @@ public class MeditationTimesActivity extends AppCompatActivity {
     private void initViews(){
         // SEARCH OPTIONS AND YEAR PICKER
         yearPicker = findViewById(R.id.spYear);
-        txtSearch = findViewById(R.id.txtSearchAudio);
+        txtSearch = findViewById(R.id.txtSearchMT);
 
         // RECYCLER VIEW SETUP
         mtRecyclerView = findViewById(R.id.audioRecyclerView);

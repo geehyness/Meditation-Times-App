@@ -53,7 +53,7 @@
         app:srcCompat="@color/colorTextHeader" />
 
     <EditText
-        android:id="@+id/txtSearchAudio"
+        android:id="@+id/txtSearchMT"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -77,16 +77,16 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtSearchAudio" />
+        app:layout_constraintTop_toBottomOf="@+id/txtSearchMT" />
 
     <ImageView
         android:id="@+id/btnSearchAudio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txtSearchAudio"
+        app:layout_constraintBottom_toBottomOf="@+id/txtSearchMT"
         app:layout_constraintStart_toStartOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="@+id/txtSearchAudio"
+        app:layout_constraintTop_toTopOf="@+id/txtSearchMT"
         app:srcCompat="@drawable/ic_search" />
 
     <ImageView

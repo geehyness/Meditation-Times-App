@@ -1,15 +1,15 @@
 package com.yukisoft.hlcmt.JavaActivities.Dashboard.Items;
 
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,9 +32,11 @@ import com.google.gson.Gson;
 import com.yukisoft.hlcmt.JavaActivities.AudioMessages.AddAudioActivity;
 import com.yukisoft.hlcmt.JavaActivities.Dashboard.HomeActivity;
 import com.yukisoft.hlcmt.JavaRepositories.Adapters.AudioAdapter;
+import com.yukisoft.hlcmt.JavaRepositories.Adapters.CatAdapter;
 import com.yukisoft.hlcmt.JavaRepositories.Comparators.AudioComparator;
 import com.yukisoft.hlcmt.JavaRepositories.Fixed.CollectionName;
 import com.yukisoft.hlcmt.JavaRepositories.Models.AudioModel;
+import com.yukisoft.hlcmt.JavaRepositories.Models.CatModel;
 import com.yukisoft.hlcmt.JavaRepositories.Models.UserModel;
 import com.yukisoft.hlcmt.MainActivity;
 import com.yukisoft.hlcmt.R;
@@ -47,19 +49,26 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
     private UserModel currentUser;
 
     // Recycler View
-    private RecyclerView audioRecyclerView;
+    private RecyclerView audioRecyclerView, catRecyclerView;
     public AudioAdapter audioAdapter;
-    private RecyclerView.LayoutManager audioLayoutManager;
+    public CatAdapter catAdapter;
+    private RecyclerView.LayoutManager catLayoutManager, audioLayoutManager;
 
-    private EditText txtSearch;
+    private SearchView txtSearch;
 
     private ArrayList<AudioModel> AudioList = new ArrayList<>();
     private ArrayList<AudioModel> displayAudioList = new ArrayList<>();
+
+    private ArrayList<CatModel> catList = new ArrayList<>();
+    private ArrayList<CatModel> displayCatList = new ArrayList<>();
+    private String currentCollection = null;
+
     private CollectionReference messages = FirebaseFirestore.getInstance().collection(CollectionName.Audio);
+    private CollectionReference collection = FirebaseFirestore.getInstance().collection(CollectionName.AudioCategory);
     public static final String MESSAGE_JSON = "MessageModel";
 
     // Media Player
-    private int length;
+    private int length, track;
     private AudioModel audio = null;
     private MediaPlayer mediaPlayer;
     private SeekBar seekBar;
@@ -100,18 +109,51 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
 
                         boolean exists = false;
 
-                        for (AudioModel m : displayAudioList)
+                        for (AudioModel m : AudioList)
                             if(m.getId().equals(tempMsg.getId()))
                                 exists = true;
 
                         if(!exists) {
+                            AudioList.add(tempMsg);
                             displayAudioList.add(tempMsg);
                         }
                     }
+
+                    displayAudioList = AudioList;
                 }
                 Collections.sort(displayAudioList, new AudioComparator());
                 Collections.sort(AudioList, new AudioComparator());
                 audioAdapter.notifyDataSetChanged();
+            }
+        });
+
+        collection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (queryDocumentSnapshots != null){
+                    for(DocumentSnapshot msg : queryDocumentSnapshots){
+                        CatModel tempMsg = msg.toObject(CatModel.class);
+                        tempMsg.setId(msg.getId());
+
+                        boolean exists = false;
+
+                        for (CatModel m : catList)
+                            if(m.getId().equals(tempMsg.getId()))
+                                exists = true;
+
+                        if(!exists) {
+                            catList.add(tempMsg);
+                        }
+                    }
+
+                    for (CatModel current : catList)
+                        if (displayCatList.size() < 5 )
+                            displayCatList.add(current);
+                        else
+                            break;
+                }
+
+                catAdapter.notifyDataSetChanged();
             }
         });
 
@@ -124,7 +166,7 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
         btnOpenDetails.setOnClickListener(this);
         upload.setOnClickListener(this);
 
-        txtSearch.addTextChangedListener(new TextWatcher() {
+        /*txtSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
             @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
             @Override public void afterTextChanged(Editable editable) {
@@ -133,7 +175,7 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
                 txtSearch.setSelection(editable.length()); //moves the pointer to end
                 txtSearch.addTextChangedListener(this);
             }
-        });
+        });*/
 
         detailsSheetBehaviour.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -178,8 +220,10 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                int place = seekBar.getProgress();
-                mediaPlayer.seekTo(place);
+                if (mediaPlayer != null){
+                    int place = seekBar.getProgress();
+                    mediaPlayer.seekTo(place);
+                }
             }
         });
     }
@@ -191,8 +235,8 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
         finish();
     }
 
-    private void search(){
-        String input = txtSearch.getText().toString();
+    /*private void search(){
+        String input = txtSearch.get().toString();
         displayAudioList.clear();
 
         if (input.isEmpty()){
@@ -210,66 +254,114 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
         }
 
         audioAdapter.notifyDataSetChanged();
+    }*/
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+        }
+        mediaPlayer.release();
     }
 
     private void initViews(){
         initMediaPlayer();
 
         // SEARCH OPTIONS
-        txtSearch = findViewById(R.id.txtSearchAudio);
+        txtSearch = findViewById(R.id.txtSearch);
 
-        // RECYCLER VIEW SETUP
+        // CATEGORY RECYCLER VIEW SETUP
+        catRecyclerView = findViewById(R.id.catRecyclerView);
+        catRecyclerView.setHasFixedSize(false);
+        catAdapter = new CatAdapter(displayCatList);
+        catLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        catRecyclerView.setLayoutManager(catLayoutManager);
+        catRecyclerView.setAdapter(catAdapter);
+        catAdapter.setOnItemClickListener(new CatAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) throws IOException {
+                CatModel collection = displayCatList.get(position);
+                Toast.makeText(AudioMSGActivity.this, collection.getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // AUDIO RECYCLER VIEW SETUP AND CLICK LISTENER
         audioRecyclerView = findViewById(R.id.audioRecyclerView);
         audioRecyclerView.setHasFixedSize(true);
-        audioLayoutManager = new LinearLayoutManager(this);
         audioAdapter = new AudioAdapter(displayAudioList);
-
-        // RECYCLER VIEW FINAL SETUP AND CLICK LISTENER
+        audioLayoutManager = new LinearLayoutManager(this);
         audioRecyclerView.setLayoutManager(audioLayoutManager);
         audioRecyclerView.setAdapter(audioAdapter);
         audioAdapter.setOnItemClickListener(new AudioAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) throws IOException {
-                AudioModel message = displayAudioList.get(position);
-                String messageJSON = (new Gson()).toJson(message);
-                String userJSON = (new Gson()).toJson(currentUser);
-
-                Log.d("MTItem", "Item - "  + messageJSON);
-
-                if (mediaPlayer != null){
-                    mediaPlayer.stop();
-                    mediaPlayer.release();
-                    mediaPlayer = null;
+            public void onItemClick(int position) {
+                try{
+                    playTrack(position);
+                } catch (IOException e) {
+                    Toast.makeText(AudioMSGActivity.this, "Unable to play.\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-
-                audio = message;
-
-                mediaPlayer = new MediaPlayer();
-                mediaPlayer.setDataSource(message.getPath());
-                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mediaPlayer) {
-                        mediaPlayer.start();
-
-                        lblSheetTitle.setText(audio.getTitle());
-                        lblDetails.setText(audio.getTitle());
-                        lblDetailsTitle.setText(audio.getDetails());
-                        btnPlaySmall.setImageResource(R.drawable.ic_mp_pause_small);
-                        btnPlayPause.setImageResource(R.drawable.ic_mp_pause);
-
-                        length = mediaPlayer.getDuration();
-                        seekBar.setMax(length);
-
-                        lblPlayTime.setText(String.valueOf(length));
-                        lblPlayLength.setText(DateUtils.formatElapsedTime(length));
-                    }
-                });
-
-                mediaPlayer.prepareAsync();
-
-                Toast.makeText(AudioMSGActivity.this, message.getPath(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void playTrack(int position) throws IOException {
+        track = position;
+        AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+
+        // Request audio focus for playback
+        AudioManager.OnAudioFocusChangeListener focusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+            @Override
+            public void onAudioFocusChange(int i) {
+                return;
+            }
+        };
+        int result = am.requestAudioFocus(focusChangeListener,
+                // Use the music stream.
+                AudioManager.STREAM_MUSIC,
+                // Request permanent focus.
+                AudioManager.AUDIOFOCUS_GAIN);
+
+
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            AudioModel message = displayAudioList.get(position);
+            String messageJSON = (new Gson()).toJson(message);
+            String userJSON = (new Gson()).toJson(currentUser);
+
+            Log.d("MTItem", "Item - "  + messageJSON);
+
+            if (mediaPlayer != null){
+                mediaPlayer.stop();
+                mediaPlayer.release();
+                mediaPlayer = null;
+            }
+
+            audio = message;
+
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(message.getPath());
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    mediaPlayer.start();
+
+                    lblSheetTitle.setText(audio.getTitle());
+                    lblDetails.setText(audio.getTitle());
+                    lblDetailsTitle.setText(audio.getDetails());
+                    btnPlaySmall.setImageResource(R.drawable.ic_mp_pause_small);
+                    btnPlayPause.setImageResource(R.drawable.ic_mp_pause);
+
+                    length = mediaPlayer.getDuration();
+                    seekBar.setMax(length);
+
+                    lblPlayTime.setText(String.valueOf(length));
+                    lblPlayLength.setText(DateUtils.formatElapsedTime(length));
+                }
+            });
+
+            mediaPlayer.prepareAsync();
+            Toast.makeText(AudioMSGActivity.this, message.getPath(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initMediaPlayer() {
@@ -314,7 +406,21 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case (R.id.btnNext):
-                // TODO: 2019/10/19 play next audio
+                if (mediaPlayer != null)
+                    if (track < displayAudioList.size() - 1)
+                        try {
+                            playTrack(track + 1);
+                        } catch (IOException e) {
+                            Toast.makeText(AudioMSGActivity.this, "Unable to play.\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    else
+                        try {
+                            playTrack(0);
+                        } catch (IOException e) {
+                            Toast.makeText(AudioMSGActivity.this, "Unable to play.\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                else
+                    Toast.makeText(this, "Select a message to start playing it.", Toast.LENGTH_SHORT).show();
                 break;
 
             case (R.id.btnRepeat):
