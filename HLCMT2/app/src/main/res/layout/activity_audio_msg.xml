@@ -172,6 +172,17 @@ tools:context=".JavaActivities.Dashboard.Items.AudioMSGActivity">
             app:rippleColor="@color/colorAccent"
             app:srcCompat="@drawable/ic_add" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAudioCollections"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:backgroundTint="@color/colorPrimary"
+            android:clickable="true"
+            app:layout_constraintBottom_toTopOf="@+id/btnAddAudio"
+            app:layout_constraintEnd_toEndOf="@+id/btnAddAudio"
+            app:srcCompat="@drawable/ic_album" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
