@@ -30,13 +30,14 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.yukisoft.hlcmt.JavaActivities.AudioMessages.AddAudioActivity;
+import com.yukisoft.hlcmt.JavaActivities.AudioMessages.AudioCollectionActivity;
 import com.yukisoft.hlcmt.JavaActivities.Dashboard.HomeActivity;
 import com.yukisoft.hlcmt.JavaRepositories.Adapters.AudioAdapter;
-import com.yukisoft.hlcmt.JavaRepositories.Adapters.CatAdapter;
+import com.yukisoft.hlcmt.JavaRepositories.Adapters.AudioCollectionAdapter;
 import com.yukisoft.hlcmt.JavaRepositories.Comparators.AudioComparator;
 import com.yukisoft.hlcmt.JavaRepositories.Fixed.CollectionName;
 import com.yukisoft.hlcmt.JavaRepositories.Models.AudioModel;
-import com.yukisoft.hlcmt.JavaRepositories.Models.CatModel;
+import com.yukisoft.hlcmt.JavaRepositories.Models.AudioCollectionModel;
 import com.yukisoft.hlcmt.JavaRepositories.Models.UserModel;
 import com.yukisoft.hlcmt.MainActivity;
 import com.yukisoft.hlcmt.R;
@@ -51,7 +52,7 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
     // Recycler View
     private RecyclerView audioRecyclerView, catRecyclerView;
     public AudioAdapter audioAdapter;
-    public CatAdapter catAdapter;
+    public AudioCollectionAdapter audioCollectionAdapter;
     private RecyclerView.LayoutManager catLayoutManager, audioLayoutManager;
 
     private SearchView txtSearch;
@@ -59,8 +60,8 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
     private ArrayList<AudioModel> AudioList = new ArrayList<>();
     private ArrayList<AudioModel> displayAudioList = new ArrayList<>();
 
-    private ArrayList<CatModel> catList = new ArrayList<>();
-    private ArrayList<CatModel> displayCatList = new ArrayList<>();
+    private ArrayList<AudioCollectionModel> catList = new ArrayList<>();
+    private ArrayList<AudioCollectionModel> displayCatList = new ArrayList<>();
     private String currentCollection = null;
 
     private CollectionReference messages = FirebaseFirestore.getInstance().collection(CollectionName.Audio);
@@ -94,9 +95,12 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
         initViews();
 
         FloatingActionButton upload = findViewById(R.id.btnAddAudio);
+        FloatingActionButton collectionManagement = findViewById(R.id.btnAudioCollections);
         upload.hide();
+        collectionManagement.hide();
         if(currentUser!=null && currentUser.isAdmin()){
             upload.show();
+            collectionManagement.show();
         }
 
         messages.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -132,12 +136,12 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (queryDocumentSnapshots != null){
                     for(DocumentSnapshot msg : queryDocumentSnapshots){
-                        CatModel tempMsg = msg.toObject(CatModel.class);
+                        AudioCollectionModel tempMsg = msg.toObject(AudioCollectionModel.class);
                         tempMsg.setId(msg.getId());
 
                         boolean exists = false;
 
-                        for (CatModel m : catList)
+                        for (AudioCollectionModel m : catList)
                             if(m.getId().equals(tempMsg.getId()))
                                 exists = true;
 
@@ -146,14 +150,14 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
                         }
                     }
 
-                    for (CatModel current : catList)
+                    for (AudioCollectionModel current : catList)
                         if (displayCatList.size() < 5 )
                             displayCatList.add(current);
                         else
                             break;
                 }
 
-                catAdapter.notifyDataSetChanged();
+                audioCollectionAdapter.notifyDataSetChanged();
             }
         });
 
@@ -165,6 +169,7 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
         btnShuffle.setOnClickListener(this);
         btnOpenDetails.setOnClickListener(this);
         upload.setOnClickListener(this);
+        collectionManagement.setOnClickListener(this);
 
         /*txtSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
@@ -276,14 +281,14 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
         // CATEGORY RECYCLER VIEW SETUP
         catRecyclerView = findViewById(R.id.catRecyclerView);
         catRecyclerView.setHasFixedSize(false);
-        catAdapter = new CatAdapter(displayCatList);
+        audioCollectionAdapter = new AudioCollectionAdapter(displayCatList);
         catLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         catRecyclerView.setLayoutManager(catLayoutManager);
-        catRecyclerView.setAdapter(catAdapter);
-        catAdapter.setOnItemClickListener(new CatAdapter.OnItemClickListener() {
+        catRecyclerView.setAdapter(audioCollectionAdapter);
+        audioCollectionAdapter.setOnItemClickListener(new AudioCollectionAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) throws IOException {
-                CatModel collection = displayCatList.get(position);
+                AudioCollectionModel collection = displayCatList.get(position);
                 Toast.makeText(AudioMSGActivity.this, collection.getName(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -445,6 +450,11 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
 
             case (R.id.btnAddAudio):
                 startActivity(new Intent(AudioMSGActivity.this, AddAudioActivity.class)
+                        .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser)));
+                break;
+
+            case (R.id.btnAudioCollections):
+                startActivity(new Intent(AudioMSGActivity.this, AudioCollectionActivity.class)
                         .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser)));
                 break;
         }
