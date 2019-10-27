@@ -259,10 +259,12 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.stop();
+        if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer.release();
         }
-        mediaPlayer.release();
     }
 
     private void initViews(){
