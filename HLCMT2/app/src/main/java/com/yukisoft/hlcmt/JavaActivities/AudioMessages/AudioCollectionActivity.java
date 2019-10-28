@@ -23,6 +23,7 @@ import com.yukisoft.hlcmt.JavaActivities.Dashboard.Items.MeditationTimesActivity
 import com.yukisoft.hlcmt.JavaActivities.MeditationTimes.ViewMeditationTimes;
 import com.yukisoft.hlcmt.JavaRepositories.Adapters.AudioAdapter;
 import com.yukisoft.hlcmt.JavaRepositories.Adapters.AudioCollectionAdapter;
+import com.yukisoft.hlcmt.JavaRepositories.Adapters.AudioCollectionListAdapter;
 import com.yukisoft.hlcmt.JavaRepositories.Fixed.CollectionName;
 import com.yukisoft.hlcmt.JavaRepositories.Models.AudioCollectionModel;
 import com.yukisoft.hlcmt.JavaRepositories.Models.AudioModel;
@@ -35,10 +36,10 @@ import java.util.ArrayList;
 
 public class AudioCollectionActivity extends AppCompatActivity {
 
-    private static final String AUDIO_COLLECTION = "Audio";
+    public static final String AUDIO_COLLECTION = "Audio";
 
     private RecyclerView catRecyclerView;
-    public AudioCollectionAdapter audioCollectionAdapter;
+    public AudioCollectionListAdapter audioCollectionAdapter;
     private RecyclerView.LayoutManager catLayoutManager;
 
     private SearchView txtSearch;
@@ -99,11 +100,11 @@ public class AudioCollectionActivity extends AppCompatActivity {
         // CATEGORY RECYCLER VIEW SETUP
         catRecyclerView = findViewById(R.id.collectionListView);
         catRecyclerView.setHasFixedSize(false);
-        audioCollectionAdapter = new AudioCollectionAdapter(displayCatList);
+        audioCollectionAdapter = new AudioCollectionListAdapter(displayCatList);
         catLayoutManager = new LinearLayoutManager(this);
         catRecyclerView.setLayoutManager(catLayoutManager);
         catRecyclerView.setAdapter(audioCollectionAdapter);
-        audioCollectionAdapter.setOnItemClickListener(new AudioCollectionAdapter.OnItemClickListener() {
+        audioCollectionAdapter.setOnItemClickListener(new AudioCollectionListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) throws IOException {
                 AudioCollectionModel collection = displayCatList.get(position);

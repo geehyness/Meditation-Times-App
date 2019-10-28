@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/imgCollectionIcon"
             android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_marginStart="16dp"
@@ -35,7 +35,7 @@
             android:text="Collection Details"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textSize="28dp"
-            app:layout_constraintBottom_toTopOf="@+id/imageView6"
+            app:layout_constraintBottom_toTopOf="@+id/imgCollectionIcon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -50,10 +50,10 @@
             android:textColor="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+            app:layout_constraintTop_toBottomOf="@+id/imgCollectionIcon" />
 
         <EditText
-            android:id="@+id/txtCollectionName"
+            android:id="@+id/txtCatName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -77,7 +77,7 @@
             android:backgroundTint="@color/colorPrimary"
             android:textColor="@color/colorTextHeader"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtCollectionName" />
+            app:layout_constraintTop_toBottomOf="@+id/txtCatName" />
 
         <Button
             android:id="@+id/btnAddToCollection"
@@ -165,6 +165,7 @@
                 app:srcCompat="@drawable/ic_mp_more" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/collectionItems"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"

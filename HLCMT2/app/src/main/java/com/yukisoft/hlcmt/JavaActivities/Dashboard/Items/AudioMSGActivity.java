@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.SeekBar;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
+import com.google.protobuf.Empty;
 import com.yukisoft.hlcmt.JavaActivities.AudioMessages.AddAudioActivity;
 import com.yukisoft.hlcmt.JavaActivities.AudioMessages.AudioCollectionActivity;
 import com.yukisoft.hlcmt.JavaActivities.Dashboard.HomeActivity;
@@ -57,12 +62,18 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
 
     private SearchView txtSearch;
 
+    private ConstraintLayout messageView, collectionView;
+    private ImageView extendCollection;
+
     private ArrayList<AudioModel> AudioList = new ArrayList<>();
     private ArrayList<AudioModel> displayAudioList = new ArrayList<>();
 
     private ArrayList<AudioCollectionModel> catList = new ArrayList<>();
     private ArrayList<AudioCollectionModel> displayCatList = new ArrayList<>();
+
     private String currentCollection = null;
+    private TextView txtCatName;
+    private TextView txtCatDetails;
 
     private CollectionReference messages = FirebaseFirestore.getInstance().collection(CollectionName.Audio);
     private CollectionReference collection = FirebaseFirestore.getInstance().collection(CollectionName.AudioCategory);
@@ -94,8 +105,17 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
 
         initViews();
 
+        txtCatName = findViewById(R.id.txtCatName);
+        txtCatDetails = findViewById(R.id.txtCollectionDetails);
+        txtCatDetails.setVisibility(View.GONE);
+        messageView = findViewById(R.id.messageView);
+        collectionView = findViewById(R.id.collectionView);
+        extendCollection = findViewById(R.id.extendCollection);
+
+        txtSearch = findViewById(R.id.txtSearch);
+
         FloatingActionButton upload = findViewById(R.id.btnAddAudio);
-        FloatingActionButton collectionManagement = findViewById(R.id.btnAudioCollections);
+        final FloatingActionButton collectionManagement = findViewById(R.id.btnAudioCollections);
         upload.hide();
         collectionManagement.hide();
         if(currentUser!=null && currentUser.isAdmin()){
@@ -119,14 +139,12 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
 
                         if(!exists) {
                             AudioList.add(tempMsg);
-                            displayAudioList.add(tempMsg);
                         }
                     }
-
-                    displayAudioList = AudioList;
                 }
-                Collections.sort(displayAudioList, new AudioComparator());
                 Collections.sort(AudioList, new AudioComparator());
+                displayAudioList.addAll(AudioList);
+
                 audioAdapter.notifyDataSetChanged();
             }
         });
@@ -151,10 +169,13 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
                     }
 
                     for (AudioCollectionModel current : catList)
-                        if (displayCatList.size() < 5 )
+                        if (displayCatList.size() < 4 )
                             displayCatList.add(current);
-                        else
+                        else {
+                            AudioCollectionModel extra = new AudioCollectionModel(null, "Extra", null);
+                            displayCatList.add(extra);
                             break;
+                        }
                 }
 
                 audioCollectionAdapter.notifyDataSetChanged();
@@ -170,6 +191,7 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
         btnOpenDetails.setOnClickListener(this);
         upload.setOnClickListener(this);
         collectionManagement.setOnClickListener(this);
+        extendCollection.setOnClickListener(this);
 
         /*txtSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
@@ -231,13 +253,71 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
                 }
             }
         });
+
+        txtSearch.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                collectionView.setVisibility(View.VISIBLE);
+                txtSearch.setBackgroundColor(getResources().getColor(R.color.colorBgDark));
+                return false;
+            }
+        });
+        txtSearch.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                collectionView.setVisibility(View.GONE);
+                txtSearch.setBackgroundColor(getResources().getColor(R.color.colorBg));
+            }
+        });
+        txtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchAudio(newText);
+                return false;
+            }
+        });
+    }
+
+    private void searchAudio(String input) {
+        displayAudioList.clear();
+
+        for (AudioModel a : AudioList) {
+            if (a.getTitle().toLowerCase().contains(input.toLowerCase()) ||
+                a.getDetails().toLowerCase().contains(input.toLowerCase()) ||
+                a.getSpeaker().toLowerCase().contains(input.toLowerCase())){
+                displayAudioList.add(a);
+            }
+        }
+
+        audioAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(AudioMSGActivity.this, HomeActivity.class)
-                .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser)));
-        finish();
+        if (currentCollection != null && !TextUtils.isEmpty(currentCollection)) {
+            txtCatName.setText("Collections");
+            catRecyclerView.setVisibility(View.VISIBLE);
+            currentCollection = null;
+            txtCatDetails.setVisibility(View.GONE);
+            displayAudioList.clear();
+            displayAudioList.addAll(AudioList);
+            audioAdapter.notifyDataSetChanged();
+
+            extendCollection.setVisibility(View.VISIBLE);
+
+            if (catRecyclerView.getLayoutManager() != catLayoutManager)
+                messageView.setVisibility(View.GONE);
+
+        } else {
+            startActivity(new Intent(AudioMSGActivity.this, HomeActivity.class)
+                    .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser)));
+            finish();
+        }
     }
 
     /*private void search(){
@@ -290,6 +370,24 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
             public void onItemClick(int position) throws IOException {
                 AudioCollectionModel collection = displayCatList.get(position);
                 Toast.makeText(AudioMSGActivity.this, collection.getName(), Toast.LENGTH_SHORT).show();
+
+                currentCollection = collection.getId();
+                txtCatName.setText(collection.getName());
+                catRecyclerView.setVisibility(View.GONE);
+                txtCatDetails.setText(collection.getDetails());
+                txtCatDetails.setVisibility(View.VISIBLE);
+
+                displayAudioList.clear();
+
+                for (AudioModel a : AudioList)
+                    for (String s : a.getCollections())
+                        if (s.equals(collection.getId()))
+                            displayAudioList.add(a);
+
+                audioAdapter.notifyDataSetChanged();
+
+                messageView.setVisibility(View.VISIBLE);
+                extendCollection.setVisibility(View.GONE);
             }
         });
 
@@ -456,6 +554,36 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
             case (R.id.btnAudioCollections):
                 startActivity(new Intent(AudioMSGActivity.this, AudioCollectionActivity.class)
                         .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser)));
+                break;
+
+            case (R.id.extendCollection):
+                if (catRecyclerView.getLayoutManager() != catLayoutManager) {
+                    catRecyclerView.setLayoutManager(catLayoutManager);
+                    messageView.setVisibility(View.VISIBLE);
+
+                    displayCatList.clear();
+                    for (AudioCollectionModel current : catList)
+                        if (displayCatList.size() < 5 )
+                            displayCatList.add(current);
+                        else
+                            break;
+
+                    audioCollectionAdapter.notifyDataSetChanged();
+
+                    extendCollection.setImageResource(R.drawable.ic_arrow_down);
+                    messageView.setVisibility(View.VISIBLE);
+                } else {
+                    catRecyclerView.setLayoutManager(new GridLayoutManager(getBaseContext(), 3));
+
+                    displayCatList.clear();
+                    displayCatList.addAll(catList);
+
+                    audioCollectionAdapter.notifyDataSetChanged();
+
+                    extendCollection.setImageResource(R.drawable.ic_arrow_up);
+                    messageView.setVisibility(View.GONE);
+                }
+
                 break;
         }
     }
