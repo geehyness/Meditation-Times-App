@@ -2,14 +2,16 @@ package com.yukisoft.hlcmt.JavaActivities.AudioMessages;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
+import android.widget.SearchView;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -48,6 +50,7 @@ public class AudioCollectionActivity extends AppCompatActivity {
     private ArrayList<AudioCollectionModel> displayCatList = new ArrayList<>();
 
     private UserModel currentUser;
+    private Button newCollection;
 
     private CollectionReference collection = FirebaseFirestore.getInstance().collection(CollectionName.AudioCategory);
 
@@ -60,6 +63,18 @@ public class AudioCollectionActivity extends AppCompatActivity {
         currentUser = (new Gson()).fromJson(i.getStringExtra(MainActivity.LOGGED_IN_USER), UserModel.class);
 
         initViews();
+
+        newCollection = findViewById(R.id.btnNewCollection);
+        newCollection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userJSON = (new Gson()).toJson(currentUser);
+                Intent i = new Intent(AudioCollectionActivity.this, AudioCollectionManagementActivity.class);
+                i.putExtra(MainActivity.LOGGED_IN_USER, userJSON);
+                startActivity(i);
+                finish();
+            }
+        });
 
         collection.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -80,22 +95,58 @@ public class AudioCollectionActivity extends AppCompatActivity {
                         }
                     }
 
-                    for (AudioCollectionModel current : catList)
-                        if (displayCatList.size() < 5 )
-                            displayCatList.add(current);
-                        else
-                            break;
+                    displayCatList.addAll(catList);
                 }
 
                 audioCollectionAdapter.notifyDataSetChanged();
             }
         });
+
+        txtSearch.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                /* collectionView.setVisibility(View.VISIBLE); */
+                txtSearch.setBackgroundColor(getResources().getColor(R.color.colorBgDark));
+                return false;
+            }
+        });
+        txtSearch.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtSearch.setBackgroundColor(getResources().getColor(R.color.colorBg));
+            }
+        });
+        txtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchCollection(newText);
+                return false;
+            }
+        });
+    }
+
+    private void searchCollection(String input) {
+        displayCatList.clear();
+
+        for (AudioCollectionModel a : catList) {
+            if (a.getName().toLowerCase().contains(input.toLowerCase()) ||
+                    a.getDetails().toLowerCase().contains(input.toLowerCase())){
+                displayCatList.add(a);
+            }
+        }
+
+        audioCollectionAdapter.notifyDataSetChanged();
     }
 
     private void initViews() {
 
         // SEARCH OPTIONS
-        txtSearch = findViewById(R.id.txtSearch);
+        txtSearch = findViewById(R.id.txtSearchCollection);
 
         // CATEGORY RECYCLER VIEW SETUP
         catRecyclerView = findViewById(R.id.collectionListView);

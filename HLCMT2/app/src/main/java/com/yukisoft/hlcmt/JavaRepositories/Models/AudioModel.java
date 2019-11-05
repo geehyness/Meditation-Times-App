@@ -25,6 +25,10 @@ public class AudioModel {
         this.collections.add(collections);
     }
 
+    public void removeCollection(String collections) {
+        this.collections.remove(collections);
+    }
+
     public Date getDatePreached() {
         return datePreached;
     }

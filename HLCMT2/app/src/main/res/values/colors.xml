@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--#fd5825-->
-    <color name="colorAccent">#fd5825</color>
-    <color name="colorPrimary">#039be5</color>
+    <color name="colorAccent">#FD5825</color>
+    <color name="colorPrimary">#039BE5</color>
     <color name="colorText">#000000</color>
     <color name="colorTextHeader">#ffffff</color>
     <color name="colorPrimaryDark">#252525</color>
 
-    <color name="colorBg">#ffffff</color>
+    <color name="colorBg">#FFFFFF</color>
     <color name="colorMP">#eeeeee</color>
     <color name="colorBgDark">#252525</color>
 
