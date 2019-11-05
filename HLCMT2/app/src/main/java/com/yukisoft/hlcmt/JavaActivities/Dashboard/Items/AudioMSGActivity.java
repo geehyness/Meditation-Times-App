@@ -1,6 +1,7 @@
 package com.yukisoft.hlcmt.JavaActivities.Dashboard.Items;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -36,6 +38,7 @@ import com.google.gson.Gson;
 import com.google.protobuf.Empty;
 import com.yukisoft.hlcmt.JavaActivities.AudioMessages.AddAudioActivity;
 import com.yukisoft.hlcmt.JavaActivities.AudioMessages.AudioCollectionActivity;
+import com.yukisoft.hlcmt.JavaActivities.AudioMessages.AudioCollectionManagementActivity;
 import com.yukisoft.hlcmt.JavaActivities.Dashboard.HomeActivity;
 import com.yukisoft.hlcmt.JavaRepositories.Adapters.AudioAdapter;
 import com.yukisoft.hlcmt.JavaRepositories.Adapters.AudioCollectionAdapter;
@@ -178,6 +181,9 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
                         txtCatDetails.setText("There are no collections available");
                         txtCatDetails.setVisibility(View.VISIBLE);
                         extendCollection.setVisibility(View.GONE);
+                    } else {
+                        txtCatDetails.setVisibility(View.GONE);
+                        extendCollection.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -258,20 +264,14 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        txtSearch.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                collectionView.setVisibility(View.VISIBLE);
-                txtSearch.setBackgroundColor(getResources().getColor(R.color.colorBgDark));
-                return false;
-            }
+        txtSearch.setOnCloseListener(() -> {
+            collectionView.setVisibility(View.VISIBLE);
+            txtSearch.setBackgroundColor(getResources().getColor(R.color.colorBgDark));
+            return false;
         });
-        txtSearch.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                collectionView.setVisibility(View.GONE);
-                txtSearch.setBackgroundColor(getResources().getColor(R.color.colorBg));
-            }
+        txtSearch.setOnSearchClickListener(v -> {
+            collectionView.setVisibility(View.GONE);
+            txtSearch.setBackgroundColor(getResources().getColor(R.color.colorBg));
         });
         txtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -640,7 +640,20 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case (R.id.btnDeleteCollection):
-                deleteCollection();
+                AudioCollectionModel collectionModel = null;
+
+                for (AudioCollectionModel c : catList)
+                    if (c.getId().equals(currentCollection))
+                        collectionModel = c;
+
+                if (collectionModel != null)
+                    new AlertDialog.Builder(AudioMSGActivity.this, R.style.MyDialogTheme)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Remove Collection?")
+                            .setMessage("Are you sure you want to delete " + collectionModel.getName())
+                            .setPositiveButton("Yes", (dialog, which) -> deleteCollection())
+                            .setNegativeButton("No", null)
+                            .show();
 
                 break;
         }
