@@ -21,10 +21,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 import com.yukisoft.hlcmt.JavaActivities.AppSpecific.PrivacyActivity;
+import com.yukisoft.hlcmt.JavaActivities.Dashboard.HomeActivity;
+import com.yukisoft.hlcmt.JavaActivities.Dashboard.Items.AudioMSGActivity;
 import com.yukisoft.hlcmt.JavaRepositories.Fixed.CollectionName;
 import com.yukisoft.hlcmt.JavaRepositories.UIElements.MyProgressDialog;
 import com.yukisoft.hlcmt.JavaRepositories.Models.UserModel;
+import com.yukisoft.hlcmt.MainActivity;
 import com.yukisoft.hlcmt.R;
 import com.yukisoft.hlcmt.JavaActivities.AppSpecific.TermsActivity;
 
@@ -170,7 +174,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 public void onSuccess(Void aVoid) {
                                     progressDialog.dismiss();
                                     Toast.makeText(RegisterActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(RegisterActivity.this, EmailVerifyActivity.class));
+                                    /*startActivity(new Intent(RegisterActivity.this, EmailVerifyActivity.class));
+                                    finish();*/
+
+                                    startActivity(new Intent(RegisterActivity.this, HomeActivity.class)
+                                            .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(user)));
                                     finish();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
