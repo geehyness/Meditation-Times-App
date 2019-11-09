@@ -56,7 +56,7 @@ public class WriteMeditationTimes extends AppCompatActivity {
         titleUI = findViewById(R.id.txtTitleMT);
         weekUI = findViewById(R.id.txtMTWeek);
         yearUI = findViewById(R.id.txtMsgYear);
-        msgUI = findViewById(R.id.txtAudioDetails);
+        msgUI = findViewById(R.id.txtMessage);
         langUI = findViewById(R.id.spMTLanguage);
 
         Calendar c = Calendar.getInstance();
@@ -90,7 +90,7 @@ public class WriteMeditationTimes extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         langUI.setAdapter(adapter);
 
-        Button post = findViewById(R.id.btnUpload);
+        Button post = findViewById(R.id.btnPost);
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
