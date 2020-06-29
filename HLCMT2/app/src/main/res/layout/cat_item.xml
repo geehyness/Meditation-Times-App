@@ -17,7 +17,9 @@
             android:id="@+id/catIcon"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:padding="2dp" />
+            android:padding="2dp"
+            android:tint="@color/colorText"
+            app:srcCompat="@drawable/ic_album" />
 
         <TextView
             android:id="@+id/catName"

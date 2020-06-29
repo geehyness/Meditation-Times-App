@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="com.yukisoft.hlcmt.JavaActivities.AudioMessages.AddAudioActivity">
+    tools:context=".JavaActivities.AudioMessages.AddAudioActivity">
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
