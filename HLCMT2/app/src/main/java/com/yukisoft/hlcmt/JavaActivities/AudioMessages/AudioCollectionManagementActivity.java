@@ -29,6 +29,7 @@ import com.yukisoft.hlcmt.JavaRepositories.Models.UserModel;
 import com.yukisoft.hlcmt.MainActivity;
 import com.yukisoft.hlcmt.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -219,81 +220,83 @@ public class AudioCollectionManagementActivity extends AppCompatActivity {
         RecyclerView.LayoutManager audioLayoutManager = new LinearLayoutManager(this);
         audioRecyclerView.setLayoutManager(audioLayoutManager);
         audioRecyclerView.setAdapter(audioAdapter);
-        audioAdapter.setOnItemClickListener(position -> {
-            /*try{
-                playTrack(position);
-            } catch (IOException e) {
-                Toast.makeText(AudioCollectionManagementActivity.this, "Unable to play.\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }*/
-
-            final AudioModel audioFile = displayAudioList.get(position);
+        audioAdapter.setOnItemClickListener(new AudioAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) throws IOException {
+                final AudioModel audioFile = displayAudioList.get(position);
 
 
-            if (adding) {
-                new AlertDialog.Builder(AudioCollectionManagementActivity.this, R.style.MyDialogTheme)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Remove message?")
-                        .setMessage("Add " + audioFile.getTitle() + " to " + collectionName.getText().toString())
-                        .setPositiveButton("Yes", (dialog, which) -> {
-                            boolean exists = false;
+                if (adding) {
+                    new AlertDialog.Builder(AudioCollectionManagementActivity.this, R.style.MyDialogTheme)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Remove message?")
+                            .setMessage("Add " + audioFile.getTitle() + " to " + collectionName.getText().toString())
+                            .setPositiveButton("Yes", (dialog, which) -> {
+                                boolean exists = false;
 
-                            for (AudioModel a : collectionList)
-                                if (a.getId().equals(audioFile.getId()))
-                                    exists = true;
+                                for (AudioModel a : collectionList)
+                                    if (a.getId().equals(audioFile.getId()))
+                                        exists = true;
 
-                            for (AudioModel a : newToCollection)
-                                if (a.getId().equals(audioFile.getId()))
-                                    exists = true;
-
-                            for (AudioModel r : removeList)
-                                if (r.getId().equals(audioFile.getId()))
-                                    removeList.remove(audioFile);
-
-                            if (!exists) {
-                                collectionList.add(audioFile);
-                                newToCollection.add(audioFile);
-                                Toast.makeText(AudioCollectionManagementActivity.this, audioFile.getTitle()+ " added to " + collectionName.getText().toString(), Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
-            } else {
-                new AlertDialog.Builder(AudioCollectionManagementActivity.this, R.style.MyDialogTheme)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Add to collection?")
-                        .setMessage("Are you sure you want to remove this message from the collection?")
-                        .setPositiveButton("Yes", (dialog, which) -> {
-                            boolean found = false;
-                            for (AudioModel a : collectionList) {
-                                if (a.getId().equals(audioFile.getId())){
-                                    found = true;
-                                    collectionList.remove(audioFile);
-                                    Log.d("add", collectionList.indexOf(audioFile) + " - " + a.getTitle());
-                                    break;
-                                }
-                            }
-
-                            if (found)
                                 for (AudioModel a : newToCollection)
+                                    if (a.getId().equals(audioFile.getId()))
+                                        exists = true;
+
+                                for (AudioModel r : removeList)
+                                    if (r.getId().equals(audioFile.getId()))
+                                        removeList.remove(audioFile);
+
+                                if (!exists) {
+                                    collectionList.add(audioFile);
+                                    newToCollection.add(audioFile);
+                                    Toast.makeText(AudioCollectionManagementActivity.this, audioFile.getTitle()+ " added to " + collectionName.getText().toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                } else {
+                    new AlertDialog.Builder(AudioCollectionManagementActivity.this, R.style.MyDialogTheme)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Add to collection?")
+                            .setMessage("Are you sure you want to remove this message from the collection?")
+                            .setPositiveButton("Yes", (dialog, which) -> {
+                                boolean found = false;
+                                for (AudioModel a : collectionList) {
                                     if (a.getId().equals(audioFile.getId())){
-                                        newToCollection.remove(a);
+                                        found = true;
+                                        collectionList.remove(audioFile);
+                                        Log.d("add", collectionList.indexOf(audioFile) + " - " + a.getTitle());
                                         break;
                                     }
+                                }
 
-                            if(!removeList.contains(audioFile))
-                                removeList.add(audioFile);
+                                if (found)
+                                    for (AudioModel a : newToCollection)
+                                        if (a.getId().equals(audioFile.getId())){
+                                            newToCollection.remove(a);
+                                            break;
+                                        }
 
-                            if(!found)
-                                Toast.makeText(AudioCollectionManagementActivity.this, "Error encountered!\n", Toast.LENGTH_SHORT).show();
-                            else {
-                                displayAudioList.clear();
-                                displayAudioList.addAll(collectionList);
-                                Collections.sort(displayAudioList, new AudioComparator());
-                                audioAdapter.notifyDataSetChanged();
-                            }
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
+                                if(!removeList.contains(audioFile))
+                                    removeList.add(audioFile);
+
+                                if(!found)
+                                    Toast.makeText(AudioCollectionManagementActivity.this, "Error encountered!\n", Toast.LENGTH_SHORT).show();
+                                else {
+                                    displayAudioList.clear();
+                                    displayAudioList.addAll(collectionList);
+                                    Collections.sort(displayAudioList, new AudioComparator());
+                                    audioAdapter.notifyDataSetChanged();
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                }
+            }
+
+            @Override
+            public void onMoreClick(int position) {
+
             }
         });
     }

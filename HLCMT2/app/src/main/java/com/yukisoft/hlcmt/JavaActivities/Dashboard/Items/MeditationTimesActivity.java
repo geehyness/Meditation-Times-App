@@ -1,6 +1,7 @@
 package com.yukisoft.hlcmt.JavaActivities.Dashboard.Items;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -204,6 +205,9 @@ public class MeditationTimesActivity extends AppCompatActivity {
         // SEARCH OPTIONS AND YEAR PICKER
         yearPicker = findViewById(R.id.spYear);
         txtSearch = findViewById(R.id.txtSearchMT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            txtSearch.setFocusedByDefault(false);
+        }
 
         // RECYCLER VIEW SETUP
         mtRecyclerView = findViewById(R.id.audioRecyclerView);
