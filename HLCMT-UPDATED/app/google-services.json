@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "926755698156",
+    "firebase_url": "https://hlcdb0.firebaseio.com",
+    "project_id": "hlcdb0",
+    "storage_bucket": "hlcdb0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:926755698156:android:577c98517954af391e7cc9",
+        "android_client_info": {
+          "package_name": "com.yukisoft.hlcmt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "926755698156-77bfnk74gm3hpgdar6bfmb6apqtfn8hg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB97R0FdSysDhv7S5hPC1TC7OXKxHvQ6gA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "926755698156-77bfnk74gm3hpgdar6bfmb6apqtfn8hg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
