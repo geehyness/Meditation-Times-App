@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".JavaActivities.Dashboard.BNV_HomeActivity"
+            android:exported="false" />
         <activity android:name=".JavaActivities.AudioMessages.AudioCollectionManagementActivity" />
         <activity android:name=".JavaActivities.AudioMessages.AudioCollectionActivity" />
         <activity android:name=".JavaActivities.AudioMessages.AddAudioActivity" />
@@ -35,7 +38,8 @@
         <activity android:name=".JavaActivities.Dashboard.HomeActivity" />
         <activity android:name=".JavaActivities.UserManagement.LoginActivity" />
         <activity android:name=".JavaActivities.UserManagement.RegisterActivity" />
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:exported="true"
             tools:node="merge">
             <intent-filter>
