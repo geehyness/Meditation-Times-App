@@ -617,95 +617,78 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case (R.id.btnSheetPlay):
-            case (R.id.btnPlayPause):
-                //Toast.makeText(this, "play", Toast.LENGTH_SHORT).show();
-                if (mediaPlayer != null){
-                    if(mediaPlayer.isPlaying()) {
-                        btnPlaySmall.setImageResource(R.drawable.ic_mp_play_small);
-                        btnPlayPause.setImageResource(R.drawable.ic_mp_play);
-                        mediaPlayer.pause();
-                    } else {
-                        btnPlaySmall.setImageResource(R.drawable.ic_mp_pause_small);
-                        btnPlayPause.setImageResource(R.drawable.ic_mp_pause);
-                        mediaPlayer.start();
+        if(view.getId()==R.id.btnSheetPlay | view.getId()==R.id.btnPlayPause) {
+            //Toast.makeText(this, "play", Toast.LENGTH_SHORT).show();
+            if (mediaPlayer != null) {
+                if (mediaPlayer.isPlaying()) {
+                    btnPlaySmall.setImageResource(R.drawable.ic_mp_play_small);
+                    btnPlayPause.setImageResource(R.drawable.ic_mp_play);
+                    mediaPlayer.pause();
+                } else {
+                    btnPlaySmall.setImageResource(R.drawable.ic_mp_pause_small);
+                    btnPlayPause.setImageResource(R.drawable.ic_mp_pause);
+                    mediaPlayer.start();
+                }
+            } else
+                Toast.makeText(this, "Select a message to start playing it.", Toast.LENGTH_SHORT).show();
+        } else if (view.getId()==R.id.btnPrev) {
+            // TODO: 2019/10/19 play prev audio
+        } else if (view.getId()==R.id.btnNext) {
+            if (mediaPlayer != null)
+                if (track < displayAudioList.size() - 1)
+                    try {
+                        playTrack(track + 1);
+                    } catch (IOException e) {
+                        Toast.makeText(AudioMSGActivity.this, "Unable to play.\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                } else
-                    Toast.makeText(this, "Select a message to start playing it.", Toast.LENGTH_SHORT).show();
-                break;
-
-            case (R.id.btnPrev):
-                // TODO: 2019/10/19 play prev audio
-                break;
-
-            case (R.id.btnNext):
-                if (mediaPlayer != null)
-                    if (track < displayAudioList.size() - 1)
-                        try {
-                            playTrack(track + 1);
-                        } catch (IOException e) {
-                            Toast.makeText(AudioMSGActivity.this, "Unable to play.\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    else
-                        try {
-                            playTrack(0);
-                        } catch (IOException e) {
-                            Toast.makeText(AudioMSGActivity.this, "Unable to play.\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
                 else
-                    Toast.makeText(this, "Select a message to start playing it.", Toast.LENGTH_SHORT).show();
-                break;
+                    try {
+                        playTrack(0);
+                    } catch (IOException e) {
+                        Toast.makeText(AudioMSGActivity.this, "Unable to play.\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+            else
+                Toast.makeText(this, "Select a message to start playing it.", Toast.LENGTH_SHORT).show();
+        } else if (view.getId()==R.id.btnRepeat) {
+            // TODO: 2019/10/19 toggle repeat
+        } else if (view.getId()==R.id.btnShuffle) {
+            // TODO: 2019/10/19 toggle shuffle
+        } else if (view.getId()==R.id.btnOpenDetails) {
+            if (detailsSheetBehaviour.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                btnOpenDetails.setImageResource(R.drawable.ic_mp_less);
+                detailsSheetBehaviour.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            } else {
+                btnOpenDetails.setImageResource(R.drawable.ic_mp_more);
+                detailsSheetBehaviour.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        } else if (view.getId()==R.id.extendCollection) {
+            if (catRecyclerView.getLayoutManager() != catLayoutManager) {
+                catRecyclerView.setLayoutManager(catLayoutManager);
+                messageView.setVisibility(View.VISIBLE);
 
-            case (R.id.btnRepeat):
-                // TODO: 2019/10/19 toggle repeat
-                break;
+                displayCatList.clear();
+                for (AudioCollectionModel current : catList)
+                    if (displayCatList.size() < 5)
+                        displayCatList.add(current);
+                    else
+                        break;
 
-            case (R.id.btnShuffle):
-                // TODO: 2019/10/19 toggle shuffle
-                break;
+                audioCollectionAdapter.notifyDataSetChanged();
 
-            case (R.id.btnOpenDetails):
-                if(detailsSheetBehaviour.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-                    btnOpenDetails.setImageResource(R.drawable.ic_mp_less);
-                    detailsSheetBehaviour.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                } else {
-                    btnOpenDetails.setImageResource(R.drawable.ic_mp_more);
-                    detailsSheetBehaviour.setState(BottomSheetBehavior.STATE_EXPANDED);
-                }
-                break;
+                extendCollection.setImageResource(R.drawable.ic_arrow_down);
+                messageView.setVisibility(View.VISIBLE);
+            } else {
+                catRecyclerView.setLayoutManager(new GridLayoutManager(getBaseContext(), 3));
 
-            case (R.id.extendCollection):
-                if (catRecyclerView.getLayoutManager() != catLayoutManager) {
-                    catRecyclerView.setLayoutManager(catLayoutManager);
-                    messageView.setVisibility(View.VISIBLE);
+                displayCatList.clear();
+                displayCatList.addAll(catList);
 
-                    displayCatList.clear();
-                    for (AudioCollectionModel current : catList)
-                        if (displayCatList.size() < 5 )
-                            displayCatList.add(current);
-                        else
-                            break;
+                audioCollectionAdapter.notifyDataSetChanged();
 
-                    audioCollectionAdapter.notifyDataSetChanged();
-
-                    extendCollection.setImageResource(R.drawable.ic_arrow_down);
-                    messageView.setVisibility(View.VISIBLE);
-                } else {
-                    catRecyclerView.setLayoutManager(new GridLayoutManager(getBaseContext(), 3));
-
-                    displayCatList.clear();
-                    displayCatList.addAll(catList);
-
-                    audioCollectionAdapter.notifyDataSetChanged();
-
-                    extendCollection.setImageResource(R.drawable.ic_arrow_up);
-                    messageView.setVisibility(View.GONE);
-                }
-
-                break;
-
-            case (R.id.btnDeleteCollection):
+                extendCollection.setImageResource(R.drawable.ic_arrow_up);
+                messageView.setVisibility(View.GONE);
+            }
+        } else if (view.getId()==R.id.btnDeleteCollection){
                 AudioCollectionModel collectionModel = null;
 
                 for (AudioCollectionModel c : catList)
@@ -720,39 +703,37 @@ public class AudioMSGActivity extends AppCompatActivity implements View.OnClickL
                             .setPositiveButton("Yes", (dialog, which) -> deleteCollection())
                             .setNegativeButton("No", null)
                             .show();
-
-                break;
         }
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menuAddAudio:
-                startActivity(new Intent(AudioMSGActivity.this, AddAudioActivity.class)
-                        .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser)));
-                return true;
-            case R.id.menuAddAudioCollection:
-                startActivity(new Intent(AudioMSGActivity.this, AudioCollectionActivity.class)
-                        .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser)));
-                return true;
-            case R.id.audioPlay:
-                try {
-                    playTrack(curPosition);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return true;
-            case R.id.audioDetails:
-                Toast.makeText(this, "Details coming soon!", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.audioEdit:
-                Toast.makeText(this, "Edit", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.audioDelete:
-                Toast.makeText(this, "Delete", Toast.LENGTH_SHORT).show();
-            default:
-                return false;
-        }
+        if (item.getItemId()==R.id.menuAddAudio) {
+            startActivity(new Intent(AudioMSGActivity.this, AddAudioActivity.class)
+                    .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser)));
+            return true;
+        } else if (item.getItemId()==R.id.menuAddAudioCollection) {
+            startActivity(new Intent(AudioMSGActivity.this, AudioCollectionActivity.class)
+                    .putExtra(MainActivity.LOGGED_IN_USER, (new Gson()).toJson(currentUser)));
+            return true;
+        } else if (item.getItemId()==R.id.audioPlay) {
+            try {
+                playTrack(curPosition);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return true;
+        } else if (item.getItemId()==R.id.audioDetails) {
+            Toast.makeText(this, "Details coming soon!", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (item.getItemId()==R.id.audioEdit) {
+            Toast.makeText(this, "Edit", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (item.getItemId()==R.id.audioDelete)
+            Toast.makeText(this, "Delete", Toast.LENGTH_SHORT).show();
+        else
+            return false;
+
+        return false;
     }
 }

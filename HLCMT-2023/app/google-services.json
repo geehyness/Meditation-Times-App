@@ -8,20 +8,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:926755698156:android:2119d31f0c553a1b",
+        "mobilesdk_app_id": "1:926755698156:android:577c98517954af391e7cc9",
         "android_client_info": {
-          "package_name": "com.hw.hlcmt"
+          "package_name": "com.yukisoft.hlcmt"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "926755698156-e9io3v2rjkmu8sed3c9dj3kuvcp3dqir.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.hw.hlcmt",
-            "certificate_hash": "62ca99e363bdfb89e6e9db44972c287aa3195bfb"
-          }
-        },
         {
           "client_id": "926755698156-77bfnk74gm3hpgdar6bfmb6apqtfn8hg.apps.googleusercontent.com",
           "client_type": 3
