@@ -3,4 +3,11 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="home">Home</string>
+    <string name="audio">Audio</string>
+    <string name="discussions">Discussions</string>
+    <string name="news">News</string>
+    <string name="profile">Profile</string>
+    <string name="search">Search</string>
+    <string name="audio_messages">Audio Messages</string>
 </resources>
