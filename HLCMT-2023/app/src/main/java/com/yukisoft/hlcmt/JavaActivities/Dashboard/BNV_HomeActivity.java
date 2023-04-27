@@ -15,6 +15,12 @@ import com.yukisoft.hlcmt.R;
 
 public class BNV_HomeActivity extends AppCompatActivity {
 
+    Fragment mt = null,
+            audio = null,
+            discussions = null,
+            news = null,
+            profile = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +40,32 @@ public class BNV_HomeActivity extends AppCompatActivity {
             item -> {
                 Fragment selectedFragment = null;
 
+//                if(item.getItemId()==R.id.nav_mt) {
+//                    if (mt == null)
+//                        mt = new FragmentMT();
+//                    selectedFragment = mt;
+//                } else if (item.getItemId()==R.id.nav_audio) {
+//                    if (audio == null)
+//                        audio = new FragmentAudio();
+//                    selectedFragment = audio;
+//                } else if (item.getItemId()==R.id.nav_talk) {
+//                    if (discussions == null)
+//                        discussions = new FragmentDiscussions();
+//                    selectedFragment = discussions;
+//                } else if (item.getItemId()==R.id.nav_news) {
+//                    if (news == null)
+//                        news = new FragmentNews();
+//                    selectedFragment = news;
+//                } else if (item.getItemId()==R.id.nav_profile) {
+//                    if (profile == null)
+//                        profile = new FragmentProfile();
+//                    selectedFragment = profile;
+//                }
+
                 if(item.getItemId()==R.id.nav_mt)
                     selectedFragment = new FragmentMT();
                 else if (item.getItemId()==R.id.nav_audio)
-                    selectedFragment = new FragmentAudio();
+                    selectedFragment =  new FragmentAudio();
                 else if (item.getItemId()==R.id.nav_talk)
                     selectedFragment = new FragmentDiscussions();
                 else if (item.getItemId()==R.id.nav_news)

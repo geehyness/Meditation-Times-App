@@ -58,6 +58,7 @@ public class MeditationTimesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meditation_times);
+
         btnAddMT = findViewById(R.id.btnAddAudio);
         btnAddMT.hide();
 
